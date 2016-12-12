@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="RedDeer Tools"
+            id="org.jboss.reddeer.codegen">
+      </category>
+      <view
+            name="RedDeer CodeGen"
+            icon="icons/reddeer_icon.png"
+            category="org.jboss.reddeer.codegen"
+            class="org.jboss.reddeer.codegen.views.CodeGenView"
+            id="org.jboss.reddeer.codegen.views.CodeGenView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               ratio="0.5"
+               relative="org.eclipse.ui.views.ProblemView"
+               relationship="right"
+               id="org.jboss.reddeer.codegen.views.CodeGenView">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.jboss.reddeer.codegen.preferences.MainPreferencePage"
+            id="org.jboss.reddeer.codegen.preferences.MainPreferencePage"
+            name="RedDeer CodeGen">
+      </page>
+      <page
+            category="org.jboss.reddeer.codegen.preferences.MainPreferencePage"
+            class="org.jboss.reddeer.codegen.preferences.MethodsPreferencePage"
+            id="org.jboss.reddeer.codegen.preferences.MethodsPreferencePage"
+            name="Specify methods">
+      </page>
+      <page
+            class="org.jboss.reddeer.codegen.preferences.SamplePreferencePage"
+            id="org.jboss.reddeer.codegen.preferences.SamplePreferencePage"
+            name="Sample Preferences">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.jboss.reddeer.codegen.preferences.PreferenceInitializer">
+      </initializer>
+      <initializer
+            class="org.jboss.reddeer.codegen.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.jboss.reddeer.codegen"
+            name="RedDeer CodeGen">
+      </category>
+      <wizard
+            category="org.jboss.reddeer.codegen"
+            class="org.jboss.reddeer.codegen.wizards.CodeGenWizard"
+            icon="icons/reddeer_icon.png"
+            id="org.jboss.reddeer.codegen.wizards.CodeGenWizard"
+            name="CodeGen">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="org.jboss.reddeer.codegen.commands.category"
+            name="CodeGen Category">
+      </category>
+      <command
+            categoryId="org.jboss.reddeer.codegen.commands.category"
+            id="org.jboss.reddeer.codegen.commands.codeGenCommand"
+            name="CodeGen Command">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.jboss.reddeer.codegen.handlers.CodeGenHandler"
+            commandId="org.jboss.reddeer.codegen.commands.codeGenCommand">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.jboss.reddeer.codegen.commands.codeGenCommand"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+F1">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="org.jboss.reddeer.codegen.menus.codeGenMenu"
+               label="CodeGen Menu"
+               mnemonic="M">
+            <command
+                  commandId="org.jboss.reddeer.codegen.commands.codeGenCommand"
+                  id="org.jboss.reddeer.codegen.menus.codeGenCommand"
+                  mnemonic="S">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="org.jboss.reddeer.codegen.toolbars.codeGenToolbar">
+            <command
+                  commandId="org.jboss.reddeer.codegen.commands.codeGenCommand"
+                  icon="icons/reddeer_icon.png"
+                  id="org.jboss.reddeer.codegen.toolbars.codeGenCommand"
+                  tooltip="RedDeer Code Generator">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+
+</plugin>

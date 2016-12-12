@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+	<description>To install these features, point Eclipse at this site.</description>
+	<category-def label="RedDeer Tools" name="ToolFeatures">
+		<description>RedDeer Tool: Contains RedDeer tools.</description>
+	</category-def>
+
+
+	<feature url="org.jboss.reddeer.codegen.feature.qualifier" id="org.jboss.reddeer.codegen.feature" version="0.0.0">
+		<category name="ToolFeatures"/>
+	</feature>
+
+</site>

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='2'>
+  <artifact classifier='osgi.bundle' id='org.jboss.reddeer.codegen' version='0.0.1.201612121737'>
+    <properties size='5'>
+      <property name='artifact.size' value='34093'/>
+      <property name='download.size' value='34093'/>
+      <property name='maven-groupId' value='reddeer.codegen'/>
+      <property name='maven-artifactId' value='org.jboss.reddeer.codegen'/>
+      <property name='maven-version' value='0.0.1-SNAPSHOT'/>
+    </properties>
+  </artifact>
+  <artifact classifier='osgi.bundle' id='org.jboss.reddeer.codegen.source' version='0.0.1.201612121737'>
+    <properties size='6'>
+      <property name='artifact.size' value='12859'/>
+      <property name='download.size' value='12859'/>
+      <property name='maven-groupId' value='reddeer.codegen'/>
+      <property name='maven-artifactId' value='org.jboss.reddeer.codegen'/>
+      <property name='maven-version' value='0.0.1-SNAPSHOT'/>
+      <property name='maven-classifier' value='sources'/>
+    </properties>
+  </artifact>
+</artifacts>
