@@ -1,5 +1,7 @@
-bin
-target
-.settings
+bin/
+target/
+
+# Eclipse
+.classpath
 .project
-.classpatho
+.settings
