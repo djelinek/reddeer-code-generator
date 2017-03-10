@@ -3,22 +3,31 @@ package org.jboss.reddeer.codegen.wizards;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.internal.junit.util.LayoutUtil;
+import org.eclipse.jdt.internal.junit.wizards.MethodStubsSelectionButtonGroup;
+import org.eclipse.jdt.ui.wizards.NewTypeWizardPage;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.jboss.reddeer.codegen.Activator;
 
-public class MethodsPage extends WizardPage {
-	
-	private Button buttonGetter;
-	private Button buttonSetter;
-	private Button buttonEnableExtends;
+public class MethodsPage extends NewTypeWizardPage {
+
 	private ISelection selection;
 	private List<String> additionalOptions;
+
+	@SuppressWarnings("restriction")
+	private MethodStubsSelectionButtonGroup fMethodStubsButtons;
+
 	/**
 	 * Constructor for MethodsPage.
 	 * 
@@ -26,81 +35,54 @@ public class MethodsPage extends WizardPage {
 	 */
 	public MethodsPage(ISelection selection) {
 		
-		super("wizardPage");
-		setTitle("RedDeer CodeGen Setup");
-		setDescription("Specify additional code generator options for a new CodeGen class.");
+		super(true, "codeGenWizardPageTwo");
+		setTitle("Methods setup");
+		setDescription("Specify CodeGen options (aditional methods, class properties, etc.)");
+		setImageDescriptor(ImageDescriptor.createFromURL(
+				FileLocator.find(Platform.getBundle(Activator.PLUGIN_ID), new Path("icons/reddeer_logo.png"), null)));
 		this.selection = selection;
+		additionalOptions = new ArrayList<String>();
+		setPageComplete(false);
 	}
 
 	/**
 	 * @see IDialogPage#createControl(Composite)
 	 */
+	@SuppressWarnings("restriction")
+	@Override
 	public void createControl(Composite parent) {
-		
-		additionalOptions = new ArrayList<String>();
-		
-		Composite container = new Composite(parent, SWT.NULL);
+
+		initializeDialogUnits(parent);
+		Composite composite = new Composite(parent, SWT.NONE);
+		int nColumns = 4;
+
 		GridLayout layout = new GridLayout();
-		container.setLayout(layout);
-		layout.numColumns = 1;
-		layout.verticalSpacing = 9;
-		
-		buttonGetter = new Button(container, SWT.CHECK);
-		buttonGetter.setText("Generate getters");
-		buttonGetter.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				//handleBrowse();
-				additionalOptions.add(buttonGetter.getText());
+		layout.numColumns = nColumns;
+		composite.setLayout(layout);
+
+		String[] buttonNames = new String[] { "Generate getters", "Generate setters", "Extends parent classes" };
+		fMethodStubsButtons = new MethodStubsSelectionButtonGroup(SWT.CHECK, buttonNames, 2) {
+			@Override
+			protected void doWidgetSelected(SelectionEvent e) {
+				super.doWidgetSelected(e);
+				// saveWidgetValues();
 			}
-		});
+		};
+		fMethodStubsButtons.setLabelText("Optional");
 		
-		buttonSetter = new Button(container, SWT.CHECK);
-		buttonSetter.setText("Generate setters");
-		buttonSetter.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				//handleBrowse();
-				System.out.println();
-				additionalOptions.add(buttonSetter.getText());
-			}
-		});
-		
-		buttonEnableExtends = new Button(container, SWT.CHECK);
-		buttonEnableExtends.setText("Allow implements or extends parent classes");
-		buttonEnableExtends.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				//handleBrowse();
-				additionalOptions.add(buttonEnableExtends.getText());
-			}
-		});
-		
-		initialize();
-		dialogChanged();
-		setControl(container);
-	}
-	
-	private void initialize() {
-		
-		return;
-	}
-	
-	private void dialogChanged() {
-		
-		return;
+		createMethodStubSelectionControls(composite, nColumns);
+		setControl(composite);
+		Dialog.applyDialogFont(composite);
 	}
 
-	private void handleBrowse() {
-		
-		return;
+	@SuppressWarnings("restriction")
+	protected void createMethodStubSelectionControls(Composite composite, int nColumns) {
+		LayoutUtil.setHorizontalSpan(fMethodStubsButtons.getLabelControl(composite), nColumns);
+		LayoutUtil.createEmptySpace(composite, 1);
+		LayoutUtil.setHorizontalSpan(fMethodStubsButtons.getSelectionButtonsGroup(composite), nColumns - 1);
 	}
 
-	private void updateStatus(String message) {
-		
-		setErrorMessage(message);
-		setPageComplete(message == null);
-	}
-	
 	public List<String> getAdditionalOptions() {
-		
 		return additionalOptions;
 	}
 

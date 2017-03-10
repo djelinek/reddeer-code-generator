@@ -1,14 +1,29 @@
 package org.jboss.reddeer.codegen.wizards;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.search.SearchEngine;
+import org.eclipse.jdt.internal.junit.wizards.WizardMessages;
+import org.eclipse.jdt.ui.IJavaElementSearchConstants;
+import org.eclipse.jdt.ui.wizards.NewInterfaceWizardPage;
+import org.eclipse.jdt.ui.wizards.NewTypeWizardPage;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.operation.IRunnableContext;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -22,14 +37,18 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
+import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
+import org.jboss.reddeer.codegen.Activator;
 
-public class FirstWizardPage extends WizardPage {
-	
+public class FirstWizardPage extends NewTypeWizardPage { //WizardPage {
+
 	private Text projectPath;
+	private Text packagePath;
 	private Text className;
 	private Group group;
 	private Button radioDefault, radioGenerate;
@@ -42,100 +61,48 @@ public class FirstWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	public FirstWizardPage(ISelection selection) {
-		
-		super("wizardPage");
-		setTitle("RedDeer CodeGen Setup");
-		setDescription("This wizard creates a new CodeGen class with *.java");
-		this.selection = selection;
+
+		super(true, "codeGenWizardPageOne");
+		setTitle("Class definition");
+		setDescription("This wizard allows generate a new CodeGen class with *.java");
+		setImageDescriptor(ImageDescriptor.createFromURL(FileLocator.find(
+				Platform.getBundle(Activator.PLUGIN_ID), new Path(
+						"icons/reddeer_logo.png"), null)));
+		setPageComplete(false);
 	}
 
 	/**
 	 * @see IDialogPage#createControl(Composite)
 	 */
+	@Override
 	public void createControl(Composite parent) {
-		
-		container = new Composite(parent, SWT.NULL);
-		GridLayout layout = new GridLayout();
-		container.setLayout(layout);
-		layout.numColumns = 1;
-		layout.verticalSpacing = 9;
-		// ---
-		
-		radioDefault = new Button(container, SWT.RADIO);
-		radioDefault.setText("Default (Generate code into CodeGen view)");
-		radioDefault.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				setGroupEnabled(false);
-				dialogChanged();
-			}
-		});
-		
-		radioGenerate = new Button(container, SWT.RADIO);
-		radioGenerate.setText("Generate code into project class");
-		radioGenerate.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				setGroupEnabled(true);
-				dialogChanged();
-			}
-		});
-		
-		group = new Group(container, SWT.VERTICAL);
-		GridLayout groupLayout = new GridLayout();
-		group.setLayout(groupLayout);
-		groupLayout.numColumns = 3;
-		groupLayout.verticalSpacing = 9;
-		group.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-			
-		// ---
-		Label label = new Label(group, SWT.NULL);
-		label.setText("&Project path:");
 
-		projectPath = new Text(group, SWT.BORDER | SWT.SINGLE);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		projectPath.setLayoutData(gd);
-		projectPath.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				dialogChanged();
-			}
-		});
+		initializeDialogUnits(parent);
+		Composite composite= new Composite(parent, SWT.NONE);	
+		int nColumns= 4;
 
-		Button button = new Button(group, SWT.PUSH);
-		button.setText("Browse");
-		button.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				handleBrowse();
-			}
-		});
-		// ---
-		
-		// ---
-		label = new Label(group, SWT.NULL);
-		label.setText("&Class name:");
-
-		className = new Text(group, SWT.BORDER | SWT.SINGLE);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		className.setLayoutData(gd);
-		className.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				dialogChanged();
-			}
-		});
-		// ---
-		
-		initialize();
-		dialogChanged();
-		setControl(container);
+		GridLayout layout= new GridLayout();
+		layout.numColumns= nColumns;
+		composite.setLayout(layout);
+		createContainerControls(composite, nColumns);
+		createPackageControls(composite, nColumns);
+		createSeparator(composite, nColumns);
+		createTypeNameControls(composite, nColumns);
+		setControl(composite);
+		//restoreWidgetValues();
+		Dialog.applyDialogFont(composite);
 	}
-
+	
+	
 	/**
 	 * Tests if the current workbench selection is a suitable container to use.
 	 */
 	private void initialize() {
-		
-		radioDefault.setSelection(true);	
+
+		radioDefault.setSelection(true);
 		setGroupEnabled(false);
 		// ---
-		
+
 		if (selection != null && selection.isEmpty() == false && selection instanceof IStructuredSelection) {
 			IStructuredSelection ssel = (IStructuredSelection) selection;
 			if (ssel.size() > 1)
@@ -147,61 +114,50 @@ public class FirstWizardPage extends WizardPage {
 					container = (IContainer) obj;
 				else
 					container = ((IResource) obj).getParent();
-					projectPath.setText(container.getFullPath().toString()); // bere posledni zvolenou cestu z historie workspacu
-					//projectPath.setText(""); // defaultne bude cesta null
+				// bere posledni zvolenou cestu z historie workspacu
+				projectPath.setText(container.getFullPath().toString());		
+				// projectPath.setText(""); // defaultne bude cesta null
 			}
 		}
+		
 		className.setText("DefaultCodeGenClass.java");
 	}
 
 	/**
 	 * Uses the standard container selection dialog to choose the new value for
 	 * the container field.
+	 * 
+	 * @throws URISyntaxException
 	 */
-	private void handleBrowse() {
-		
-		/*
-		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(getShell(), new WorkbenchLabelProvider(),
-				new WorkbenchContentProvider());
-		
-		dialog.setInput(ResourcesPlugin.getWorkspace().getRoot());
-		dialog.setAllowMultiple(false);
-		dialog.setMessage("Select path for new CodeGen class");
+	private void handleBrowse() throws URISyntaxException {
+
+		ElementListSelectionDialog dialog = new ElementListSelectionDialog(getShell(), new WorkbenchLabelProvider());
+		dialog.setElements(ResourcesPlugin.getWorkspace().getRoot().getProjects());
+		dialog.setMessage("Choose package for new CodeGen class.");
+		dialog.setTitle("Package selection");
 		if (dialog.open() == ElementTreeSelectionDialog.OK) {
 			Object[] result = dialog.getResult();
 			if (result.length == 1) {
-				projectPath.setText(((Path) result[0]).toString());
+				projectPath.setText(((IResource) result[0]).getFullPath().toOSString());
 			}
 		}
-		*/
-		
-		ContainerSelectionDialog dialog = new ContainerSelectionDialog(
-				getShell(), ResourcesPlugin.getWorkspace().getRoot(), false,
-				"Select path for new CodeGen class");
-		if (dialog.open() == ContainerSelectionDialog.OK) {
-			Object[] result = dialog.getResult();
-			if (result.length == 1) {
-				projectPath.setText(((Path) result[0]).toString());
-			}
-		}
-		
+
 	}
 
 	/**
 	 * Ensures that both text fields are set.
 	 */
 	private void dialogChanged() {
-		
-		IResource container = ResourcesPlugin.getWorkspace().getRoot()
-				.findMember(new Path(getProjectPath()));
-		String fileName = getClassName();
 
-		if (getProjectPath().length() == 0 && radioGenerate.getSelection()) {
+		IResource container = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(getPackageText()));
+		String fileName = getTypeName();
+
+		if (getPackageText().length() == 0 && radioGenerate.getSelection()) {
 			updateStatus("Project path must be specified");
 			return;
 		}
-		if (container == null
-				|| (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0 && radioGenerate.getSelection()) {
+		if (container == null || (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0
+				&& radioGenerate.getSelection()) {
 			updateStatus("Project path must exist");
 			return;
 		}
@@ -224,13 +180,12 @@ public class FirstWizardPage extends WizardPage {
 				updateStatus("Class extension must be \"java\"");
 				return;
 			}
-		}
-		else
-		{
+		} else {
 			updateStatus("Class extension must be specified");
 			return;
 		}
-		updateStatus(null);
+		
+		updateStatus("ERROR");
 	}
 
 	private void updateStatus(String message) {
@@ -238,29 +193,9 @@ public class FirstWizardPage extends WizardPage {
 		setPageComplete(message == null);
 	}
 
-	public String getProjectPath() {
-		return projectPath.getText();
-	}
-
-	public String getClassName() {
-		return className.getText();
-	}
-	
 	private void setGroupEnabled(boolean status) {
-		
 		for (Control child : group.getChildren())
 			child.setEnabled(status);
 	}
-	
-	public boolean getRadioDefault() {
-		
-		return this.radioDefault.getSelection();
-	}
-	
-	public boolean getRadioGenerate() {
-		
-		return this.radioGenerate.getSelection();
-	}
-	
-	
+
 }
