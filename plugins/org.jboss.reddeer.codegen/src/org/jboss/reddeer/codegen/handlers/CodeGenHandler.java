@@ -6,6 +6,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.jboss.reddeer.codegen.wizards.CodeGenWizard;
+import org.jboss.reddeer.core.lookup.ShellLookup;
+import org.jboss.reddeer.workbench.core.lookup.WorkbenchShellLookup;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -23,19 +25,16 @@ public class CodeGenHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-
 		openCodeGen(window); // when click on toolbar button
-		
 		window.getShell().getDisplay().addFilter(SWT.KeyDown, new Listener() {
 			public void handleEvent(Event e) {
-				if ((e.stateMask == SWT.MOD3) && (e.keyCode == 'g')) { 
+				if ((e.stateMask == SWT.ALT) && (e.keyCode == 'g')) { 
 					// Shortcut – ALT + G
 					// System.out.println("Listener activated");
 					openCodeGen(window);
 				}
 			}
 		});	
-		
 		return null;
 	}
 	
