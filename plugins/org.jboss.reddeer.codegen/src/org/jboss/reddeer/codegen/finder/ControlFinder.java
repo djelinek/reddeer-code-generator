@@ -6,6 +6,10 @@ import java.util.List;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+/**
+ * 
+ * @author djelinek
+ */
 public class ControlFinder extends Finder<Control> {
 
 	@Override

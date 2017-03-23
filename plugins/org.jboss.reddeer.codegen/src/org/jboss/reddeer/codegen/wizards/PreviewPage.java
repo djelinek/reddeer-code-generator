@@ -8,16 +8,22 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 import org.jboss.reddeer.codegen.Activator;
+import org.jboss.reddeer.codegen.builder.ClassBuilder;
 
+/**
+ * 
+ * @author djelinek
+ */
 public class PreviewPage extends NewTypeWizardPage {
 
 	private ISelection selection;
-	private Text area;
+	private StyledText area;
+	private ClassBuilder classBuilder;
 
 	public PreviewPage(ISelection selection) {
 		super(true, "codeGenWizardPageThree");
@@ -26,7 +32,7 @@ public class PreviewPage extends NewTypeWizardPage {
 		setImageDescriptor(ImageDescriptor.createFromURL(
 				FileLocator.find(Platform.getBundle(Activator.PLUGIN_ID), new Path("icons/reddeer_logo.png"), null)));
 		this.selection = selection;
-		// setPageComplete(true);
+		setPageComplete(false);
 	}
 
 	@Override
@@ -35,18 +41,20 @@ public class PreviewPage extends NewTypeWizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout(1, false);
 		composite.setLayout(layout);
-
-		area = new Text(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
+		area = new StyledText(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		area.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		area.setEditable(false);
-		//area.setEnabled(false);
-
+		area.setEditable(true);
 		setControl(composite);
 		Dialog.applyDialogFont(composite);
-
 	}
 
-	public void fillArea(String str) {
+	public void updateAreaContent(ClassBuilder builder) {
+		if (!area.getText().isEmpty())
+			area.cut();
+		area.setText(builder.toString());
+	}
+
+	public void setAreaTXT(String str) {
 		area.setText(str);
 	}
 
@@ -54,8 +62,16 @@ public class PreviewPage extends NewTypeWizardPage {
 		return area.getText();
 	}
 
-	public Text getArea() {
+	public StyledText getArea() {
 		return area;
+	}
+
+	public ClassBuilder getPreviewClassBuilder() {
+		return this.classBuilder;
+	}
+
+	public void setClassBuilder(ClassBuilder classBuilder) {
+		this.classBuilder = classBuilder;
 	}
 
 }

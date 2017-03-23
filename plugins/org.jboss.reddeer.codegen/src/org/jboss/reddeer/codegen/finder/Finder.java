@@ -6,6 +6,13 @@ import java.util.Stack;
 
 import org.hamcrest.Matcher;
 
+/**
+ * 
+ * @author djelinek
+ *
+ * @param <T>
+ *            Control
+ */
 public abstract class Finder<T> {
 
 	/**

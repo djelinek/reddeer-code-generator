@@ -9,17 +9,10 @@ import org.jboss.reddeer.codegen.builder.MethodBuilder;
  * Interface for all code generators. If the code generator supports a given
  * control/widget then it will generate the appropriate code (it will generate
  * constants, getter/setter methods, etc).
+ * 
+ * @author djelinek
  */
 public interface CodeGen {
-
-	/**
-	 * Returns whether a given control/widget is supported.
-	 * 
-	 * @param control
-	 *            control/widget
-	 * @return whether a given control/widget is supported
-	 */
-	boolean isSupported(Control control);
 
 	/**
 	 * Returns lookup constructor for a given control/widget
@@ -28,8 +21,14 @@ public interface CodeGen {
 	 *            control/widget
 	 * @return lookup constructor for a given control/widget
 	 */
-	MethodBuilder getConstructor(Control control);
-	
-	///
-	List<MethodBuilder> getGeneratedMethods(Control control);
+	MethodBuilder constructor(Control control);
+
+	/**
+	 * Returns list of actions methods for given control/widget
+	 * 
+	 * @param control
+	 *            control/widget
+	 * @return list of MethodBuilder action methods for given control/widget
+	 */
+	List<MethodBuilder> getActionMethods(Control control);
 }

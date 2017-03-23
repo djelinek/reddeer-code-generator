@@ -15,7 +15,7 @@
 
 	<modules>
 		<module>org.jboss.reddeer.codegen</module>
-		
+
 	</modules>
 
 </project>

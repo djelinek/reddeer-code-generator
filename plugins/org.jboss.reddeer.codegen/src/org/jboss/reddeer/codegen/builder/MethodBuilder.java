@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * 
+ * @author djelinek
+ */
 public class MethodBuilder {
 
 	private String name;
@@ -41,12 +45,12 @@ public class MethodBuilder {
 	public static MethodBuilder method() {
 		return new MethodBuilder();
 	}
-	
+
 	/**
 	 * Static method for creating a default constructor
 	 * 
 	 * @param name
-	 * 		      String
+	 *            String
 	 * @return method builder
 	 */
 	public static MethodBuilder constructor(String name) {
@@ -57,7 +61,7 @@ public class MethodBuilder {
 	 * Sets visibility.
 	 * 
 	 * @param visibility
-	 *                  visibility
+	 *            visibility
 	 * @return current code builder
 	 */
 	public MethodBuilder visibility(String visibility) {
@@ -99,7 +103,7 @@ public class MethodBuilder {
 	public MethodBuilder get(String name) {
 		return name("get" + name);
 	}
-	
+
 	/**
 	 * Sets set method name, e.g. set("Name") returns "setName".
 	 * 
@@ -115,7 +119,7 @@ public class MethodBuilder {
 	 * Sets method parameter, e.g. "String name".
 	 * 
 	 * @param parameter
-	 *                 method parameter
+	 *            method parameter
 	 * @return current code builder
 	 */
 	public MethodBuilder parameter(String parameter) {
@@ -127,7 +131,7 @@ public class MethodBuilder {
 	 * Adds a given command into the method.
 	 * 
 	 * @param command
-	 *               commands inside method
+	 *            commands inside method
 	 * @return current code builder
 	 */
 	public MethodBuilder command(String command) {
@@ -142,17 +146,21 @@ public class MethodBuilder {
 	 * Adds a return command to the method.
 	 * 
 	 * @param command
-	 *               return command
+	 *            return command
 	 * @return current code builder
 	 */
 	public MethodBuilder returnCommand(String command) {
 		return command("return " + command);
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	@Override
 	public String toString() {
 		StringBuffer code = new StringBuffer();
-		if(returnType.isEmpty())
+		if (returnType.isEmpty())
 			code.append(TAB).append(visibility).append(SPACE).append(name).append("(");
 		else
 			code.append(TAB).append(visibility).append(SPACE).append(returnType).append(SPACE).append(name).append("(");

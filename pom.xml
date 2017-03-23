@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>reddeer.codegen</groupId>
 	<artifactId>parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>RedDeer CodeGen Parent POM file</name>
-	
+
 	<properties>
 		<!-- when you're ready to move to building with JDK 8, you can move up to Tycho 0.23.1 -->
 		<tycho-version>0.22.0</tycho-version>
@@ -16,20 +16,21 @@
 		<eclipse-target-site>http://download.eclipse.org/releases/neon</eclipse-target-site>
 		<swtbot-update-site>http://download.eclipse.org/technology/swtbot/releases/2.2.1</swtbot-update-site>
 		<eclipse-orbit-update-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20150821153341/repository/</eclipse-orbit-update-site>
+		<reddeer-update-site>http://download.jboss.org/jbosstools/neon/snapshots/builds/reddeer_master/</reddeer-update-site>
 		<download-plugin-version>1.2.1</download-plugin-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- In the update site's site/pom.xml (that calls jbosstools-maven-plugins/tycho-plugins/repository-utils)
-				 you can override this value to be Nightly Build, Development Milestone, or Stable Release, or set to &amp;shy; (soft hyphen) to leave blank -->
+		you can override this value to be Nightly Build, Development Milestone, or Stable Release, or set to &amp;shy; (soft hyphen) to leave blank -->
 		<update.site.description>&amp;shy;</update.site.description>
 		<targetEclipseVersion>4.6 (Neon)</targetEclipseVersion>
 	</properties>
-	
+
 	<modules>
 		<module>plugins</module>
 		<module>features</module>
 		<module>site</module>
 	</modules>
-	
+
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
@@ -43,14 +44,14 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho-version}</version>
-                <extensions>true</extensions>
-			</plugin>				
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-packaging-plugin</artifactId>
 				<version>${tycho-version}</version>
-            </plugin>
-            <plugin>
+			</plugin>
+			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho-version}</version>
@@ -116,23 +117,16 @@
 			<id>eclipse-target-site</id>
 			<url>${eclipse-target-site}</url>
 			<layout>p2</layout>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
 		</repository>
 		<repository>
 			<id>swtbot-update-site</id>
 			<url>${swtbot-update-site}</url>
 			<layout>p2</layout>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
+		</repository>
+		<repository>
+			<id>reddeer-update-site</id>
+			<url>${reddeer-update-site}</url>
+			<layout>p2</layout>
 		</repository>
 		<repository>
 			<id>eclipse-orbit-update-site</id>
@@ -141,14 +135,4 @@
 		</repository>
 	</repositories>
 
-	<profiles>
-	  <profile>
-	    <id>product</id>
-	    <modules>
-	      <module>features/org.jboss.reddeer.ide.feature</module>
-	      <module>product</module>
-	    </modules>
-	  </profile>
-	</profiles>
-	
 </project>

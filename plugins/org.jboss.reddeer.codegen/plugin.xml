@@ -20,28 +20,15 @@
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
-            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
-         <menu
-               icon="icons/reddeer_icon.png"
-               id="org.jboss.reddeer.codegen.menus.codeGenMenu"
-               label="CodeGen Menu"
-               mnemonic="M">
-            <command
-                  commandId="org.jboss.reddeer.codegen.commands.codeGenCommand"
-                  icon="icons/reddeer_icon.png"
-                  id="org.jboss.reddeer.codegen.menus.codeGenCommand"
-                  mnemonic="S">
-            </command>
-         </menu>
-      </menuContribution>
-      <menuContribution
             locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
          <toolbar
-               id="org.jboss.reddeer.codegen.toolbars.sampleToolbar">
+               id="org.jboss.reddeer.codegen.toolbars.codeGenToolbar"
+               label="RedDeer CodeGen">
             <command
                   commandId="org.jboss.reddeer.codegen.commands.codeGenCommand"
                   icon="icons/reddeer_icon.png"
                   id="org.jboss.reddeer.codegen.toolbars.codeGenCommand"
+                  label="Red Deer CodeGen"
                   tooltip="Red Deer CodeGen">
             </command>
          </toolbar>

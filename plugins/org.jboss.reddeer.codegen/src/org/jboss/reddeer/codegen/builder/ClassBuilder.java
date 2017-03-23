@@ -3,13 +3,18 @@ package org.jboss.reddeer.codegen.builder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author djelinek
+ */
 public class ClassBuilder {
 
 	private String className;
 	private String visibility;
-	private StringBuilder classBuilder;
+	private StringBuffer classBuilder;
 	private String packageName;
 	private List<String> imports;
+	private List<String> selectedOptionals;
 	private List<MethodBuilder> methods;
 
 	private static final String SPACE = " ";
@@ -21,24 +26,21 @@ public class ClassBuilder {
 	public ClassBuilder(String name, String projectPackage) {
 		this.className = getClassName(name);
 		this.visibility = "public";
-		// list of imported packages
 		this.packageName = projectPackage;
-		// list of class methods
 		methods = new ArrayList<>();
-		methods.add(MethodBuilder.constructor(className));
-		classBuilder = new StringBuilder();
 		imports = new ArrayList<>();
+		selectedOptionals = new ArrayList<>();
+		classBuilder = new StringBuffer();
 	}
 
 	public ClassBuilder(String name, String projectPackage, List<MethodBuilder> methods) {
 		this.className = getClassName(name);
 		this.visibility = "public";
-		// list of imported packages
 		this.packageName = projectPackage;
-		// list of class methods
 		this.methods = methods;
-		classBuilder = new StringBuilder();
 		imports = new ArrayList<>();
+		selectedOptionals = new ArrayList<>();
+		classBuilder = new StringBuffer();
 	}
 
 	/**
@@ -50,12 +52,13 @@ public class ClassBuilder {
 	 * </ul>
 	 */
 	public ClassBuilder() {
-		this.className = "DefaultCodeGenClass";
+		this.className = "CodeGenDefault";
 		this.visibility = "public";
-		this.packageName = "org.jboss.reddeer";
+		this.packageName = "org";
 		methods = new ArrayList<>();
-		classBuilder = new StringBuilder();
 		imports = new ArrayList<>();
+		selectedOptionals = new ArrayList<>();
+		classBuilder = new StringBuffer();
 	}
 
 	/**
@@ -84,6 +87,10 @@ public class ClassBuilder {
 	 *            MethodBuilder - method
 	 */
 	public void addMethod(MethodBuilder method) {
+		for (MethodBuilder m : methods) {
+			if (m.getName().equals(method.getName()))
+				return;
+		}
 		methods.add(method);
 	}
 
@@ -93,8 +100,17 @@ public class ClassBuilder {
 	 * @param methods
 	 *            MethodBuilder - list of methods
 	 */
-	public void addMethods(List<MethodBuilder> methods) {
-		this.methods.addAll(methods);
+	public void addMethods(List<MethodBuilder> meths) {
+		boolean exist;
+		for (MethodBuilder meth : meths) {
+			exist = false;
+			for (MethodBuilder m : methods) {
+				if (m.getName().equals(meth.getName()))
+					exist = true;
+			}
+			if (!exist)
+				this.methods.add(meth);
+		}
 	}
 
 	/**
@@ -106,7 +122,7 @@ public class ClassBuilder {
 	public void setPackage(String packageName) {
 		this.packageName = packageName;
 	}
-	
+
 	/**
 	 * Adds import to class
 	 * 
@@ -114,7 +130,25 @@ public class ClassBuilder {
 	 *            String - name for class import
 	 */
 	public void addImport(String importName) {
-		imports.add(importName);
+		if (!this.imports.contains(importName))
+			this.imports.add(importName);
+	}
+
+	/**
+	 * Adds imports to class
+	 * 
+	 * @param imports
+	 *            List of imports
+	 */
+	public void addImports(List<String> imports) {
+		for (String im : imports) {
+			if (!this.imports.contains(im))
+				this.imports.add(im);
+		}
+	}
+
+	public void addOptionals(List<String> optionals) {
+		this.selectedOptionals = optionals;
 	}
 
 	/**
@@ -127,20 +161,34 @@ public class ClassBuilder {
 		this.className = name;
 	}
 
+	public String getClassName() {
+		return this.className;
+	}
+
+	public String getPackageName() {
+		return this.packageName;
+	}
+
 	@Override
 	public String toString() {
-		classBuilder = new StringBuilder();
+		classBuilder = new StringBuffer(iniComment());
 		// Add all packages into class
 		classBuilder.append("package").append(SPACE).append(packageName).append(SEMICOLON).append(D_NEW_LINE);
+		// is extendible for extending WizardDialog ?
+		boolean extendible = isExtendible();
 		// Add all imports into class
 		for (String projectImport : imports) {
 			classBuilder.append("import").append(SPACE).append(projectImport).append(SEMICOLON).append(NEW_LINE);
 		}
-		if(!imports.isEmpty())
+		if (!imports.isEmpty())
 			classBuilder.append(NEW_LINE);
 		// create head of class
-		classBuilder.append(visibility).append(SPACE).append("class").append(SPACE).append(className).append(SPACE)
-				.append("{");
+		if (extendible && selectedOptionals.contains("Allow inheriting"))
+			classBuilder.append(visibility).append(SPACE).append("class").append(SPACE).append(getClassName(className))
+					.append(SPACE).append("extends").append(SPACE).append("NewWizardDialog").append(SPACE).append("{");
+		else
+			classBuilder.append(visibility).append(SPACE).append("class").append(SPACE).append(getClassName(className))
+					.append(SPACE).append("{");
 		// class methods
 		classBuilder.append(D_NEW_LINE).append(TAB).append("// Generated class methods").append(NEW_LINE);
 		for (MethodBuilder method : methods) {
@@ -151,8 +199,59 @@ public class ClassBuilder {
 		return classBuilder.toString();
 	}
 
+	public boolean isExtendible() {
+
+		boolean extendible = false;
+		List<MethodBuilder> toRemove = new ArrayList<>();
+		for (MethodBuilder meth : this.methods) {
+			if (meth.getName().contains("Finish") || meth.getName().contains("Cancel")
+					|| meth.getName().contains("Next") || meth.getName().contains("Back")) {
+				toRemove.add(meth);
+				extendible = true;
+			}
+		}
+		if (extendible && selectedOptionals.contains("Allow inheriting")) {
+			imports.add("org.jboss.reddeer.jface.wizard.NewWizardDialog");
+			for (MethodBuilder rm : toRemove) {
+				methods.remove(rm);
+			}
+		}
+		return extendible;
+	}
+
+	private String iniComment() {
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("/** \n" + " * This class '" + getFileName(className)
+				+ "' was generated by RedDeer Code Generator. \n");
+		sb.append(" * Selected optional:");
+		for (String optional : selectedOptionals) {
+			sb.append("\n *").append(TAB).append(TAB).append(optional);
+		}
+		sb.append("\n */ \n");
+		return sb.toString();
+	}
+
 	private String getClassName(String name) {
-		return name.substring(0, name.lastIndexOf("."));
+		try {
+			if (name.substring(name.lastIndexOf("."), name.length()).equals(".java"))
+				return name.substring(0, name.lastIndexOf("."));
+			else
+				return name;
+		} catch (Exception e) {
+			return name;
+		}
+	}
+
+	private String getFileName(String name) {
+		try {
+			if (name.substring(name.lastIndexOf("."), name.length()).equals(".java"))
+				return name;
+			else
+				return name + ".java";
+		} catch (Exception e) {
+			return name + ".java";
+		}
 	}
 
 }
