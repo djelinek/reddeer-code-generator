@@ -24,9 +24,8 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 	@Override
 	public boolean appliesTo(Event event) {
 		event.type = SWT.Modify;
-		if (event.widget instanceof Text && !((Text) event.widget).getText().isEmpty()
-				&& ((Text) event.widget).getTopIndex() != 0)
-			return super.appliesTo(event);
+		if (event.widget instanceof Text)
+			return true;
 		else
 			return false;
 	}
@@ -53,7 +52,7 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 		} else {
 			label = "\"" + label + "\"";
 		}
-		return MethodBuilder.method().name("set" + label).parameter("String str").command(getCommand("set"));
+		return MethodBuilder.method().name("setText" + label).parameter("String str").command(getCommand("set"));
 	}
 
 	public MethodBuilder get(Control control) {
@@ -63,12 +62,13 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 		} else {
 			label = "\"" + label + "\"";
 		}
-		return MethodBuilder.method().returnType("String").get(label).command(getCommand("get"));
+		return MethodBuilder.method().returnType("String").get("Text" + label).command(getCommand("get"));
 	}
 
 	@Override
 	public List<MethodBuilder> getActionMethods(Control control) {
 		List<MethodBuilder> forReturn = new ArrayList<>();
+		forReturn.add(constructor(control));
 		forReturn.add(set(control));
 		forReturn.add(get(control));
 		return forReturn;

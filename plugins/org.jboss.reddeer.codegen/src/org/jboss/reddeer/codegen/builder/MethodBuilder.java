@@ -13,6 +13,7 @@ public class MethodBuilder {
 	private String name;
 	private String visibility;
 	private String returnType;
+	private String type;
 	private List<String> parameters;
 	private List<String> commands;
 
@@ -155,6 +156,17 @@ public class MethodBuilder {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getMethodType() {
+		if (name.startsWith("get"))
+			if (name.substring(0, 7).equals("getText"))
+				return "Getter";
+			else
+				return "Constructor";
+		else if (name.startsWith("setText"))
+			return "Setter";
+		return null;
 	}
 
 	@Override

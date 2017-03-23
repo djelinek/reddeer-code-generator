@@ -44,7 +44,7 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 	@Override
 	public List<MethodBuilder> getActionMethods(Control control) {
 		List<MethodBuilder> forReturn = new ArrayList<>();
-		// forReturn.add(constructor(control));
+		forReturn.add(constructor(control));
 		return forReturn;
 	}
 

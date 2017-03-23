@@ -51,6 +51,7 @@ public class MethodsPage extends NewTypeWizardPage {
 		selectedOptional = new ArrayList<String>();
 		selectedOptional.add("Constructor");
 		selectedOptional.add("Getter");
+		selectedOptional.add("Allow inheriting");
 		setPageComplete(false);
 	}
 
@@ -88,6 +89,7 @@ public class MethodsPage extends NewTypeWizardPage {
 		createMethodStubSelectionControls(composite, nColumns);
 		fMethodBasicStubsButtons.setSelection(0, true);
 		fMethodOptionalStubsButtons.setSelection(0, true);
+		fMethodOptionalStubsButtons.setSelection(2, true);
 		setControl(composite);
 		Dialog.applyDialogFont(composite);
 	}
