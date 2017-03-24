@@ -10,7 +10,7 @@ import org.eclipse.swtbot.generator.framework.WidgetUtils;
 import org.jboss.reddeer.codegen.CodeGen;
 import org.jboss.reddeer.codegen.builder.MethodBuilder;
 import org.jboss.reddeer.core.lookup.ShellLookup;
-import org.jboss.reddeer.swt.generator.internal.framework.rules.simple.ShellRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.ShellRule;
 
 /**
  * 

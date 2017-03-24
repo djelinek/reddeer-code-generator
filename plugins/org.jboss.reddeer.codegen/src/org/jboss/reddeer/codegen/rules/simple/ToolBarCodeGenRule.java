@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.jboss.reddeer.codegen.CodeGen;
 import org.jboss.reddeer.codegen.builder.MethodBuilder;
-import org.jboss.reddeer.swt.generator.internal.framework.rules.simple.ToolBarRule;
+import org.jboss.reddeer.swt.generator.framework.rules.simple.ToolBarRule;
 
 /**
  * 
