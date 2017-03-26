@@ -52,6 +52,7 @@ public class MethodsPage extends NewTypeWizardPage {
 		selectedOptional.add("Constructor");
 		selectedOptional.add("Getter");
 		selectedOptional.add("Allow inheriting");
+		selectedOptional.add("Action");	
 		setPageComplete(false);
 	}
 
@@ -76,7 +77,7 @@ public class MethodsPage extends NewTypeWizardPage {
 			}
 		};
 
-		String[] optionalButtonNames = new String[] { "Getter", "Setter", "Allow inheriting" };
+		String[] optionalButtonNames = new String[] { "Getter", "Setter", "Allow inheriting", "Action" };
 		fMethodOptionalStubsButtons = new MethodStubsSelectionButtonGroup(SWT.CHECK, optionalButtonNames, nColumns) {
 			@Override
 			protected void doWidgetSelected(SelectionEvent e) {
@@ -89,7 +90,8 @@ public class MethodsPage extends NewTypeWizardPage {
 		createMethodStubSelectionControls(composite, nColumns);
 		fMethodBasicStubsButtons.setSelection(0, true);
 		fMethodOptionalStubsButtons.setSelection(0, true);
-		fMethodOptionalStubsButtons.setSelection(2, true);
+		//fMethodOptionalStubsButtons.setSelection(2, true);
+		fMethodOptionalStubsButtons.setSelection(3, true);
 		setControl(composite);
 		Dialog.applyDialogFont(composite);
 	}

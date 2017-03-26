@@ -166,7 +166,8 @@ public class MethodBuilder {
 				return "Constructor";
 		else if (name.startsWith("setText"))
 			return "Setter";
-		return null;
+		else
+			return "Action";
 	}
 
 	@Override

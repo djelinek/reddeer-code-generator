@@ -25,7 +25,14 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 	public boolean appliesTo(Event event) {
 		event.type = SWT.Modify;
 		if (event.widget instanceof Text)
-			return true;
+			try {
+				if(!WidgetUtils.cleanText(WidgetUtils.getLabel((Text)event.widget)).isEmpty())
+					return true;
+				else
+					return false;			
+			} catch (Exception e) {
+				return false;
+			}
 		else
 			return false;
 	}

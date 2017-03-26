@@ -2,10 +2,12 @@ package org.jboss.reddeer.codegen;
 
 import java.util.List;
 
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
+import org.eclipse.ui.internal.dialogs.WorkbenchPreferenceDialog;
 import org.hamcrest.core.IsInstanceOf;
 import org.jboss.reddeer.codegen.builder.ClassBuilder;
 import org.jboss.reddeer.codegen.builder.MethodBuilder;
@@ -22,6 +24,7 @@ import org.jboss.reddeer.core.lookup.ShellLookup;
  * 
  * @author djelinek
  */
+@SuppressWarnings("restriction")
 public class Generator {
 
 	private ControlFinder controlFinder;
@@ -39,7 +42,13 @@ public class Generator {
 	public Control getControl() {
 		Shell[] sh = ShellLookup.getInstance().getShells();
 		Control[] c = sh[sh.length - 2].getChildren();
-		return c[0];
+		Object o = sh[sh.length - 2].getData();
+		if(o instanceof WizardDialog)
+			return ((WizardDialog)o).getCurrentPage().getControl();
+		else if(o instanceof WorkbenchPreferenceDialog)
+			return ((WorkbenchPreferenceDialog)o).getCurrentPage().getControl();
+		else
+			return c[0];
 	}
 
 	public ClassBuilder generateCode(Control parentControl) {
