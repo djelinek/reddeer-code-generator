@@ -59,7 +59,7 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 		} else {
 			label = "\"" + label + "\"";
 		}
-		return MethodBuilder.method().name("setText" + label).parameter("String str").command(getCommand("set"));
+		return MethodBuilder.method().name("setText " + label).parameter("String str").command(getCommand("set"));
 	}
 
 	public MethodBuilder get(Control control) {

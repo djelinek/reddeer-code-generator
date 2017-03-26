@@ -90,7 +90,7 @@ public class MethodBuilder {
 	 * @return current code builder
 	 */
 	public MethodBuilder name(String name) {
-		this.name = name.replaceAll("\\W", "");
+		this.name = methodNameMask(name).replaceAll("\\W", "");
 		return this;
 	}
 
@@ -102,7 +102,7 @@ public class MethodBuilder {
 	 * @return current code builder
 	 */
 	public MethodBuilder get(String name) {
-		return name("get" + name);
+		return name("get " + name);
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class MethodBuilder {
 	 * @return current code builder
 	 */
 	public MethodBuilder set(String name) {
-		return name("set" + name);
+		return name("set " + name);
 	}
 
 	/**
@@ -167,7 +167,19 @@ public class MethodBuilder {
 		else if (name.startsWith("setText"))
 			return "Setter";
 		else
-			return "Action";
+			return "Action method";
+	}
+	
+	private String methodNameMask(String name) {		
+		String[] words = name.split(" ");
+		String forReturn = words[0];
+		for (int i = 1; i < words.length; i++)	{
+			if(String.valueOf(words[i].charAt(0)).equals("\""))	
+				forReturn = forReturn + words[i].replaceFirst(String.valueOf(words[i].charAt(1)), String.valueOf(words[i].charAt(1)).toUpperCase());
+			else
+				forReturn = forReturn + words[i].replaceFirst(String.valueOf(words[i].charAt(0)), String.valueOf(words[i].charAt(0)).toUpperCase());
+		}
+		return forReturn;
 	}
 
 	@Override
