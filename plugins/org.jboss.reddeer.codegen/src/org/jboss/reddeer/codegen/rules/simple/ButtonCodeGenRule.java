@@ -50,9 +50,9 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		String comm = getCommand();
 		String actionText = comm.substring(comm.lastIndexOf("."), comm.lastIndexOf("("));
 		if (actionText.equals(".toggle"))
-			return MethodBuilder.method().name(actionText + getText()).parameter("boolean choice").command(comm);
+			return MethodBuilder.method().name(actionText + " " + getText()).parameter("boolean choice").command(comm);
 		else
-			return MethodBuilder.method().name(actionText + getText()).command(comm);
+			return MethodBuilder.method().name(actionText + " " + getText()).command(comm);
 	}
 
 	@Override
