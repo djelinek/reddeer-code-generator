@@ -16,6 +16,7 @@ public class ClassBuilder {
 	private List<String> imports;
 	private List<String> selectedOptionals;
 	private List<MethodBuilder> methods;
+	private String extendedClass;
 
 	private static final String SPACE = " ";
 	private static final String SEMICOLON = ";";
@@ -168,6 +169,14 @@ public class ClassBuilder {
 	public String getPackageName() {
 		return this.packageName;
 	}
+	
+	public String getExtendedClass() {
+		return this.extendedClass;
+	}
+	
+	public void setExtendedClass(String name) {
+		this.extendedClass = name;
+	}
 
 	@Override
 	public String toString() {
@@ -185,7 +194,7 @@ public class ClassBuilder {
 		// create head of class
 		if (extendible && selectedOptionals.contains("Allow inheriting"))
 			classBuilder.append(visibility).append(SPACE).append("class").append(SPACE).append(getClassName(className))
-					.append(SPACE).append("extends").append(SPACE).append("NewWizardDialog").append(SPACE).append("{");
+					.append(SPACE).append("extends").append(SPACE).append(this.extendedClass).append(SPACE).append("{");
 		else
 			classBuilder.append(visibility).append(SPACE).append("class").append(SPACE).append(getClassName(className))
 					.append(SPACE).append("{");
@@ -200,7 +209,7 @@ public class ClassBuilder {
 	}
 
 	public boolean isExtendible() {
-
+		
 		boolean extendible = false;
 		List<MethodBuilder> toRemove = new ArrayList<>();
 		for (MethodBuilder meth : this.methods) {
@@ -211,7 +220,7 @@ public class ClassBuilder {
 			}
 		}
 		if (extendible && selectedOptionals.contains("Allow inheriting")) {
-			imports.add("org.jboss.reddeer.jface.wizard.NewWizardDialog");
+			imports.add("org.jboss.reddeer.jface.wizard." + this.extendedClass);
 			for (MethodBuilder rm : toRemove) {
 				methods.remove(rm);
 			}

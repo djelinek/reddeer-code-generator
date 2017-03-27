@@ -43,18 +43,22 @@ public class Generator {
 		Shell[] sh = ShellLookup.getInstance().getShells();
 		Control[] c = sh[sh.length - 2].getChildren();
 		Object o = sh[sh.length - 2].getData();
-		if(o instanceof WizardDialog)
+		if(o instanceof WizardDialog) {
+			classBuilder.setExtendedClass("NewWizardDialog");
 			return ((WizardDialog)o).getCurrentPage().getControl();
-		else if(o instanceof WorkbenchPreferenceDialog)
+		}
+		else if(o instanceof WorkbenchPreferenceDialog) {
+			classBuilder.setExtendedClass("PreferenceDialog");
 			return ((WorkbenchPreferenceDialog)o).getCurrentPage().getControl();
+		}
 		else
 			return c[0];
 	}
 
-	public ClassBuilder generateCode(Control parentControl) {
+	public ClassBuilder generateCode() {
 
 		classBuilder.addOptionals(options);
-		List<Control> controls = controlFinder.find(parentControl, new IsInstanceOf(Control.class));
+		List<Control> controls = controlFinder.find(getControl(), new IsInstanceOf(Control.class));
 		List<GenerationSimpleRule> simples = new CodeGenRules().createSimpleRules();
 		Event e = new Event();
 		for (Control control : controls) {

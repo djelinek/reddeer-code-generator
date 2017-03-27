@@ -93,7 +93,7 @@ public class CodeGenHandler extends AbstractHandler {
 					Generator g = new Generator(meth.getClassBuilder().getClassName(),
 							meth.getClassBuilder().getPackageName(), meth.getSelectedOptional());
 					log.info("Trying to update text area in 'PreviewPage'.");
-					prev.updateAreaContent(g.generateCode(g.getControl()));
+					prev.updateAreaContent(g.generateCode());
 				}
 
 			}
