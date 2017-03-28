@@ -147,6 +147,10 @@ public class ClassBuilder {
 				this.imports.add(im);
 		}
 	}
+	
+	public void clearImports(){
+		this.imports.clear();
+	}
 
 	public void addOptionals(List<String> optionals) {
 		this.selectedOptionals = optionals;

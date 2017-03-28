@@ -39,10 +39,10 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 
 	@Override
 	public MethodBuilder constructor(Control control) {
-		String type = "LabeledCCombo";
+		String type = "LabeledCombo";
 		String label = getLabel();
 		if (label == null || label.isEmpty()) {
-			type = "DefaultCCombo";
+			type = "DefaultCombo";
 			label = String.valueOf(getIndex());
 		} else {
 			label = "\"" + label + "\"";
@@ -53,7 +53,7 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 	}
 
 	/**
-	 * new LabeledCCombo(""). getSelection setSelection getText setText getItems
+	 * new LabeledCCombo(""). getSelection setSelection getText getItems
 	 */
 
 	@Override

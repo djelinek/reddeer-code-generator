@@ -14,7 +14,6 @@ import org.jboss.reddeer.codegen.rules.simple.ButtonCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.ComboCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.ShellCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.TextCodeGenRule;
-import org.jboss.reddeer.codegen.rules.simple.ToolBarCodeGenRule;
 
 /**
  * 
@@ -29,7 +28,6 @@ public class CodeGenRules implements Generator {
 		rules.add(new TextCodeGenRule());
 		rules.add(new ComboCodeGenRule());
 		rules.add(new ShellCodeGenRule());
-		rules.add(new ToolBarCodeGenRule());
 		return rules;
 	}
 

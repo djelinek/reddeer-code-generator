@@ -17,7 +17,6 @@ import org.jboss.reddeer.codegen.rules.simple.ButtonCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.ComboCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.ShellCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.TextCodeGenRule;
-import org.jboss.reddeer.codegen.rules.simple.ToolBarCodeGenRule;
 import org.jboss.reddeer.core.lookup.ShellLookup;
 
 /**
@@ -56,6 +55,7 @@ public class Generator {
 	public ClassBuilder generateCode() {
 
 		classBuilder.addOptionals(options);
+		classBuilder.clearImports();
 		List<Control> controls = controlFinder.find(getControl(), new IsInstanceOf(Control.class));
 		List<GenerationSimpleRule> simples = new CodeGenRules().createSimpleRules();
 		Event e = new Event();
@@ -66,35 +66,35 @@ public class Generator {
 					continue;
 				}
 				rule.initializeForEvent(e);
-				for (String im : rule.getImports()) {
-					classBuilder.addImport(im);
-				}
 				if (rule instanceof ButtonCodeGenRule) {
 					for (MethodBuilder meth : ((ButtonCodeGenRule) rule).getActionMethods(control)) {
-						if (options.contains(meth.getMethodType()))
+						if (options.contains(meth.getMethodType())) {
 							classBuilder.addMethod(meth);
+							classBuilder.addImports(rule.getImports());
+						}
 					}
 				} else if (rule instanceof TextCodeGenRule) {
 					for (MethodBuilder meth : ((TextCodeGenRule) rule).getActionMethods(control)) {
-						if (options.contains(meth.getMethodType()))
+						if (options.contains(meth.getMethodType())) {
 							classBuilder.addMethod(meth);
+							classBuilder.addImports(rule.getImports());
+						}
 					}
 				} else if (rule instanceof ComboCodeGenRule) {
 					for (MethodBuilder meth : ((ComboCodeGenRule) rule).getActionMethods(control)) {
-						if (options.contains(meth.getMethodType()))
+						if (options.contains(meth.getMethodType())) {
 							classBuilder.addMethod(meth);
+							classBuilder.addImports(rule.getImports());
+						}
 					}
 				} else if (rule instanceof ShellCodeGenRule) {
 					for (MethodBuilder meth : ((ShellCodeGenRule) rule).getActionMethods(control)) {
-						if (options.contains(meth.getMethodType()))
+						if (options.contains(meth.getMethodType())) {
 							classBuilder.addMethod(meth);
+							classBuilder.addImports(rule.getImports());
+						}
 					}
-				} else if (rule instanceof ToolBarCodeGenRule) {
-					for (MethodBuilder meth : ((ToolBarCodeGenRule) rule).getActionMethods(control)) {
-						if (options.contains(meth.getMethodType()))
-							classBuilder.addMethod(meth);
-					}
-				}
+				} 
 
 			}
 
