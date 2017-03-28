@@ -43,15 +43,13 @@ public class Generator {
 		Shell[] sh = ShellLookup.getInstance().getShells();
 		Control[] c = sh[sh.length - 2].getChildren();
 		Object o = sh[sh.length - 2].getData();
-		if(o instanceof WizardDialog) {
+		if (o instanceof WizardDialog) {
 			classBuilder.setExtendedClass("NewWizardDialog");
-			return ((WizardDialog)o).getCurrentPage().getControl();
-		}
-		else if(o instanceof WorkbenchPreferenceDialog) {
+			return ((WizardDialog) o).getCurrentPage().getControl();
+		} else if (o instanceof WorkbenchPreferenceDialog) {
 			classBuilder.setExtendedClass("PreferenceDialog");
-			return ((WorkbenchPreferenceDialog)o).getCurrentPage().getControl();
-		}
-		else
+			return ((WorkbenchPreferenceDialog) o).getCurrentPage().getControl();
+		} else
 			return c[0];
 	}
 

@@ -36,6 +36,8 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		}
 		String type = getType();
 		String ref = RedDeerUtils.getReferencedCompositeString(getComposites());
+		if (!ref.isEmpty())
+			suffix = suffix + "group";
 		return MethodBuilder.method().returnType(type).get(label + suffix)
 				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")");
 	}
@@ -47,18 +49,33 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		} else {
 			label = "\"" + label + "\"";
 		}
-		String comm = getCommand();
+		String comm = getCommand("btn");
 		String actionText = comm.substring(comm.lastIndexOf("."), comm.lastIndexOf("("));
+		String ref = RedDeerUtils.getReferencedCompositeString(getComposites());
+		if (!ref.isEmpty())
+			suffix = suffix + "group";
 		if (actionText.equals(".toggle"))
-			return MethodBuilder.method().name(actionText + " " + getText()).parameter("boolean choice").command(comm);
+			return MethodBuilder.method().name(actionText + " " + WidgetUtils.cleanText(label) + suffix)
+					.parameter("boolean choice").command(comm);
 		else
-			return MethodBuilder.method().name(actionText + " " + getText()).command(comm);
+			return MethodBuilder.method().name(actionText + " " + WidgetUtils.cleanText(label) + suffix).command(comm);
+	}
+
+	public MethodBuilder get(Control control) {
+		String label = getText();
+		if (label == null || label.isEmpty()) {
+			label = String.valueOf(getIndex());
+		} else {
+			label = "\"" + label + "\"";
+		}
+		return MethodBuilder.method().returnType("String").get("Text" + label).command(getCommand("get"));
 	}
 
 	@Override
 	public List<MethodBuilder> getActionMethods(Control control) {
 		List<MethodBuilder> forReturn = new ArrayList<>();
 		forReturn.add(constructor(control));
+		forReturn.add(get(control));
 		forReturn.add(action(control));
 		return forReturn;
 	}
@@ -88,7 +105,7 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		return type;
 	}
 
-	public String getCommand() {
+	public String getCommand(String type) {
 		StringBuilder builder = new StringBuilder("new " + getType() + "(");
 		builder.append(RedDeerUtils.getReferencedCompositeString(getComposites()));
 		String text = getText();
@@ -96,13 +113,17 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		if (text == null || text.isEmpty()) {
 			builder.append(index);
 		} else {
-			builder.append("\"" + text + "\"");
+			builder.append("\"" + WidgetUtils.cleanText(text) + "\"");
 		}
 		builder.append(")");
-		if ((getStyle() & SWT.CHECK) != 0) {
-			builder.append(".toggle(choice)");
-		} else {
-			builder.append(".click()");
+		if (type.equals("btn"))
+			if ((getStyle() & SWT.CHECK) != 0) {
+				builder.append(".toggle(choice)");
+			} else {
+				builder.append(".click()");
+			}
+		else if (type.equals("get")) {
+			builder.append(".getText()");
 		}
 		return builder.toString();
 	}

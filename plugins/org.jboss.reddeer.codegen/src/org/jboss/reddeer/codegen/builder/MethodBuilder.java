@@ -13,7 +13,6 @@ public class MethodBuilder {
 	private String name;
 	private String visibility;
 	private String returnType;
-	private String type;
 	private List<String> parameters;
 	private List<String> commands;
 
@@ -169,15 +168,20 @@ public class MethodBuilder {
 		else
 			return "Action method";
 	}
-	
-	private String methodNameMask(String name) {		
-		String[] words = name.split(" ");
+
+	private String methodNameMask(String name) {
+		String[] words = name
+				.replaceAll("[\\d\\'\\+\\-\\:\\;\\(\\)\\[\\]\\{\\}\\~\\^\\*\\&\\#\\@\\$\\<\\>\\,\\_\\.\\\"]", "")
+				.split(" ");
 		String forReturn = words[0];
-		for (int i = 1; i < words.length; i++)	{
-			if(String.valueOf(words[i].charAt(0)).equals("\""))	
-				forReturn = forReturn + words[i].replaceFirst(String.valueOf(words[i].charAt(1)), String.valueOf(words[i].charAt(1)).toUpperCase());
+		for (int i = 1; i < words.length; i++) {
+			if (words[i].isEmpty())
+				continue;
+			if (Character.isDigit(words[i].charAt(0)))
+				forReturn = forReturn + words[i];
 			else
-				forReturn = forReturn + words[i].replaceFirst(String.valueOf(words[i].charAt(0)), String.valueOf(words[i].charAt(0)).toUpperCase());
+				forReturn = forReturn + words[i].replaceFirst(String.valueOf(words[i].charAt(0)),
+						String.valueOf(words[i].charAt(0)).toUpperCase());
 		}
 		return forReturn;
 	}
@@ -202,6 +206,25 @@ public class MethodBuilder {
 		}
 		code.append(TAB).append("}");
 		return code.toString();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MethodBuilder other = (MethodBuilder) obj;
+		if (commands == null) {
+			if (other.commands != null)
+				return false;
+		} else if (commands.equals(other.commands))
+			return true;
+		if (name == other.name)
+			return true;
+		return false;
 	}
 
 }

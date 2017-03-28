@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
@@ -23,15 +24,25 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 	@Override
 	public boolean appliesTo(Event event) {
 		event.type = SWT.Modify;
-		return super.appliesTo(event);
+		if (event.widget instanceof Combo)
+			try {
+				if (!WidgetUtils.cleanText(WidgetUtils.getLabel((Combo) event.widget)).isEmpty())
+					return true;
+				else
+					return false;
+			} catch (Exception e) {
+				return false;
+			}
+		else
+			return false;
 	}
 
 	@Override
 	public MethodBuilder constructor(Control control) {
-		String type = "LabeledCombo";
+		String type = "LabeledCCombo";
 		String label = getLabel();
 		if (label == null || label.isEmpty()) {
-			type = "DefaultCombo";
+			type = "DefaultCCombo";
 			label = String.valueOf(getIndex());
 		} else {
 			label = "\"" + label + "\"";
@@ -40,6 +51,10 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		return MethodBuilder.method().returnType(type).get(label + suffix)
 				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")");
 	}
+
+	/**
+	 * new LabeledCCombo(""). getSelection setSelection getText setText getItems
+	 */
 
 	@Override
 	public List<MethodBuilder> getActionMethods(Control control) {

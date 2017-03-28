@@ -89,7 +89,7 @@ public class ClassBuilder {
 	 */
 	public void addMethod(MethodBuilder method) {
 		for (MethodBuilder m : methods) {
-			if (m.getName().equals(method.getName()))
+			if (m.equals(method))
 				return;
 		}
 		methods.add(method);
@@ -169,11 +169,11 @@ public class ClassBuilder {
 	public String getPackageName() {
 		return this.packageName;
 	}
-	
+
 	public String getExtendedClass() {
 		return this.extendedClass;
 	}
-	
+
 	public void setExtendedClass(String name) {
 		this.extendedClass = name;
 	}
@@ -209,7 +209,7 @@ public class ClassBuilder {
 	}
 
 	public boolean isExtendible() {
-		
+
 		boolean extendible = false;
 		List<MethodBuilder> toRemove = new ArrayList<>();
 		for (MethodBuilder meth : this.methods) {
