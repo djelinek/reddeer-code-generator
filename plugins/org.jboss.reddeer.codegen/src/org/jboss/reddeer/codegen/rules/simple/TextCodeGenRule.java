@@ -26,10 +26,10 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 		event.type = SWT.Modify;
 		if (event.widget instanceof Text)
 			try {
-				if(!WidgetUtils.cleanText(WidgetUtils.getLabel((Text)event.widget)).isEmpty())
+				if (!WidgetUtils.cleanText(WidgetUtils.getLabel((Text) event.widget)).isEmpty())
 					return true;
 				else
-					return false;			
+					return false;
 			} catch (Exception e) {
 				return false;
 			}
@@ -82,22 +82,22 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 	}
 
 	public String getCommand(String type) {
-		StringBuilder builder = new StringBuilder();
+		StringBuffer sb = new StringBuffer();
 		String label = getLabel();
 		if (label != null) {
-			builder.append("new LabeledText(");
-			builder.append(RedDeerUtils.getReferencedCompositeString(getComposites()));
-			builder.append("\"" + label + "\"");
+			sb.append("new LabeledText(");
+			sb.append(RedDeerUtils.getReferencedCompositeString(getComposites()));
+			sb.append("\"" + WidgetUtils.cleanText(label) + "\"");
 		} else {
-			builder.append("new DefaultText(");
-			builder.append(RedDeerUtils.getReferencedCompositeString(getComposites()));
-			builder.append(getIndex());
+			sb.append("new DefaultText(");
+			sb.append(RedDeerUtils.getReferencedCompositeString(getComposites()));
+			sb.append(getIndex());
 		}
 		if (type.equals("set"))
-			builder.append(").setText(str)");
+			sb.append(").setText(str)");
 		else if (type.equals("get"))
-			builder.append(").getText()");
-		return builder.toString();
+			sb.append(").getText()");
+		return sb.toString();
 	}
 
 }

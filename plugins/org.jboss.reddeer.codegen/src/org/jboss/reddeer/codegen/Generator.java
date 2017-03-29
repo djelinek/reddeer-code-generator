@@ -94,7 +94,7 @@ public class Generator {
 							classBuilder.addImports(rule.getImports());
 						}
 					}
-				} 
+				}
 
 			}
 

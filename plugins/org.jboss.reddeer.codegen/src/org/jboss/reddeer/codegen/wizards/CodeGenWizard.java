@@ -28,6 +28,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.dialogs.NewWizard;
 import org.jboss.reddeer.codegen.builder.ClassBuilder;
 import org.jboss.reddeer.common.logging.Logger;
+import org.jboss.reddeer.common.util.Display;
 
 /**
  * 
@@ -43,6 +44,7 @@ public class CodeGenWizard extends NewWizard implements INewWizard {
 	private PreviewPage previewPage;
 	private ISelection selection;
 	private ClassBuilder classBuilder;
+	private boolean ans = false;
 
 	/**
 	 * Constructor for CodeGenWizard.
@@ -113,7 +115,7 @@ public class CodeGenWizard extends NewWizard implements INewWizard {
 			MessageDialog.openError(getShell(), "Error", realException.getMessage());
 			return false;
 		}
-		return true;
+		return ans;
 	}
 
 	/**
@@ -134,8 +136,26 @@ public class CodeGenWizard extends NewWizard implements INewWizard {
 		final IFile file = container.getFile(new Path(fileName));
 		try {
 			if (file.exists()) {
-				file.setContents(stream, true, true, monitor);
+				Display.syncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						ans = MessageDialog.openQuestion(getShell(), "Warning dialog",
+								"This file already exists, overwrite ?");
+						if (ans)
+							try {
+								file.setContents(stream, true, true, monitor);
+							} catch (CoreException e) {
+								Throwable realException = e.getCause();
+								MessageDialog.openError(getShell(), "Error", realException.getMessage());
+								return;
+							}
+						else
+							return;
+					}
+				});
 			} else {
+				ans = true;
 				file.create(stream, true, monitor);
 			}
 			stream.close();
@@ -143,7 +163,7 @@ public class CodeGenWizard extends NewWizard implements INewWizard {
 		}
 		monitor.worked(1);
 		monitor.setTaskName("Opening file for editing...");
-		getShell().getDisplay().asyncExec(new Runnable() {
+		Display.asyncExec(new Runnable() {
 			public void run() {
 				IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 				try {

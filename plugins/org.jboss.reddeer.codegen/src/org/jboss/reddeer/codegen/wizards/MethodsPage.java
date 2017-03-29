@@ -78,7 +78,7 @@ public class MethodsPage extends NewTypeWizardPage {
 		};
 
 		String[] optionalButtonNames = new String[] { "Getter", "Setter", "Allow inheriting", "Action method",
-				"Generate methods for all Wizard/Preferences pages" };
+				"Generate complete wizard/preference page methods" };
 		fMethodOptionalStubsButtons = new MethodStubsSelectionButtonGroup(SWT.CHECK, optionalButtonNames, 1) {
 			@Override
 			protected void doWidgetSelected(SelectionEvent e) {

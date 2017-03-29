@@ -55,12 +55,79 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 	/**
 	 * new LabeledCCombo(""). getSelection setSelection getText getItems
 	 */
+	public MethodBuilder get(Control control) {
+		String label = getLabel();
+		if (label == null || label.isEmpty()) {
+			label = String.valueOf(getIndex());
+		} else {
+			label = "\"" + label + "\"";
+		}
+		return MethodBuilder.method().returnType("String").get("Text" + label).command(getCommand("get"));
+	}
+
+	public MethodBuilder getSelection(Control control) {
+		String label = getLabel();
+		if (label == null || label.isEmpty()) {
+			label = String.valueOf(getIndex());
+		} else {
+			label = "\"" + label + "\"";
+		}
+		return MethodBuilder.method().returnType("String").get("Selection" + label).command(getCommand("getSelection"));
+	}
+
+	public MethodBuilder getItems(Control control) {
+		String label = getLabel();
+		if (label == null || label.isEmpty()) {
+			label = String.valueOf(getIndex());
+		} else {
+			label = "\"" + label + "\"";
+		}
+		return MethodBuilder.method().returnType("List<String>").get("Items" + label).command(getCommand("items"));
+	}
+
+	public MethodBuilder setSelection(Control control) {
+		String label = getLabel();
+		if (label == null || label.isEmpty()) {
+			label = String.valueOf(getIndex());
+		} else {
+			label = "\"" + label + "\"";
+		}
+		return MethodBuilder.method().name("setSelection " + label).parameter("String str")
+				.command(getCommand("setSelection"));
+	}
 
 	@Override
 	public List<MethodBuilder> getActionMethods(Control control) {
 		List<MethodBuilder> forReturn = new ArrayList<>();
 		forReturn.add(constructor(control));
+		forReturn.add(get(control));
+		forReturn.add(getSelection(control));
+		forReturn.add(getItems(control));
+		forReturn.add(setSelection(control));
 		return forReturn;
+	}
+
+	public String getCommand(String type) {
+		StringBuffer sb = new StringBuffer();
+		String label = getLabel();
+		if (label != null) {
+			sb.append("new LabeledCombo(");
+			sb.append(RedDeerUtils.getReferencedCompositeString(getComposites()));
+			sb.append("\"" + WidgetUtils.cleanText(label) + "\"");
+		} else {
+			sb.append("new DefaultCombo(");
+			sb.append(RedDeerUtils.getReferencedCompositeString(getComposites()));
+			sb.append(getIndex());
+		}
+		if (type.equals("setSelection"))
+			sb.append(").setSelection(str)");
+		else if (type.equals("get"))
+			sb.append(").getText()");
+		else if (type.equals("getSelection"))
+			sb.append(").getSelection()");
+		else if (type.equals("items"))
+			sb.append(").getItems()");
+		return sb.toString();
 	}
 
 }
