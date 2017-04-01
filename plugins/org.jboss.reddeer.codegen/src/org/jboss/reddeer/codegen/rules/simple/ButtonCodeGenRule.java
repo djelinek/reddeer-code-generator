@@ -53,7 +53,8 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		String actionText = comm.substring(comm.lastIndexOf("."), comm.lastIndexOf("("));
 		String ref = RedDeerUtils.getReferencedCompositeString(getComposites());
 		if (!ref.isEmpty())
-			suffix = suffix + "group";
+			suffix = "Group";
+
 		if (actionText.equals(".toggle"))
 			return MethodBuilder.method().name(actionText + " " + WidgetUtils.cleanText(label) + suffix)
 					.parameter("boolean choice").command(comm);
