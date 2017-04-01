@@ -2,6 +2,8 @@ package org.jboss.reddeer.codegen.builder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 
@@ -16,6 +18,7 @@ public class ClassBuilder {
 	private List<String> imports;
 	private List<String> selectedOptionals;
 	private List<MethodBuilder> methods;
+	private Map<String, String> constants;
 	private String extendedClass;
 
 	private static final String SPACE = " ";
@@ -31,6 +34,7 @@ public class ClassBuilder {
 		methods = new ArrayList<>();
 		imports = new ArrayList<>();
 		selectedOptionals = new ArrayList<>();
+		constants = new TreeMap<>();
 		classBuilder = new StringBuffer();
 	}
 
@@ -41,6 +45,7 @@ public class ClassBuilder {
 		this.methods = methods;
 		imports = new ArrayList<>();
 		selectedOptionals = new ArrayList<>();
+		constants = new TreeMap<>();
 		classBuilder = new StringBuffer();
 	}
 
@@ -59,6 +64,7 @@ public class ClassBuilder {
 		methods = new ArrayList<>();
 		imports = new ArrayList<>();
 		selectedOptionals = new ArrayList<>();
+		constants = new TreeMap<>();
 		classBuilder = new StringBuffer();
 	}
 
@@ -147,8 +153,8 @@ public class ClassBuilder {
 				this.imports.add(im);
 		}
 	}
-	
-	public void clearImports(){
+
+	public void clearImports() {
 		this.imports.clear();
 	}
 
@@ -182,6 +188,11 @@ public class ClassBuilder {
 		this.extendedClass = name;
 	}
 
+	public void addConstants(Map<String, String> map) {
+		if(map != null)
+			this.constants.putAll(map);
+	}
+
 	@Override
 	public String toString() {
 		classBuilder = new StringBuffer(iniComment());
@@ -202,6 +213,13 @@ public class ClassBuilder {
 		else
 			classBuilder.append(visibility).append(SPACE).append("class").append(SPACE).append(getClassName(className))
 					.append(SPACE).append("{");
+		// class constants
+		if (!constants.isEmpty()) {
+			for (String constant : constants.keySet()) {
+				classBuilder.append(D_NEW_LINE).append(TAB).append("public static final String").append(SPACE)
+						.append(constant).append(" = ").append("\"" + constants.get(constant) + "\"").append(SEMICOLON);
+			}
+		}
 		// class methods
 		classBuilder.append(D_NEW_LINE).append(TAB).append("// Generated class methods").append(NEW_LINE);
 		for (MethodBuilder method : methods) {

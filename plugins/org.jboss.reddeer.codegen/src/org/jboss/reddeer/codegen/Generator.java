@@ -85,6 +85,7 @@ public class Generator {
 						if (options.contains(meth.getMethodType())) {
 							classBuilder.addMethod(meth);
 							classBuilder.addImports(rule.getImports());
+							classBuilder.addConstants(((ComboCodeGenRule) rule).getSelectionList(control));
 						}
 					}
 				} else if (rule instanceof ShellCodeGenRule) {
