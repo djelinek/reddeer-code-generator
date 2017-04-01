@@ -159,11 +159,15 @@ public class MethodBuilder {
 
 	public String getMethodType() {
 		if (name.startsWith("get"))
-			if (name.substring(0, 7).equals("getText") || name.substring(0, 8).equals("getItems")
-					|| name.substring(0, 12).equals("getSelection"))
-				return "Getter";
-			else
+			try {
+				if (name.substring(0, 7).equals("getText") || name.substring(0, 8).equals("getItems")
+						|| name.substring(0, 12).equals("getSelection"))
+					return "Getter";
+				else
+					return "Constructor";
+			} catch (Exception e) {
 				return "Constructor";
+			}
 		else if (name.startsWith("setText") || name.startsWith("setSelection"))
 			return "Setter";
 		else

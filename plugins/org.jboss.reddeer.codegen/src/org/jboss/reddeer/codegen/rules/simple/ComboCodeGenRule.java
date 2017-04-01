@@ -2,6 +2,8 @@ package org.jboss.reddeer.codegen.rules.simple;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Combo;
@@ -95,7 +97,20 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		return MethodBuilder.method().name("setSelection " + label).parameter("String str")
 				.command(getCommand("setSelection"));
 	}
-
+	
+	public Map<String, String> getSelectionList(Control control) {
+		Combo combo = ((Combo) control);
+		Map<String, String> items = new TreeMap<>();
+		if(combo.getItemCount() > 0) {
+			for (String item : combo.getItems()) {
+				String key = WidgetUtils.cleanText(item).toUpperCase().replaceAll(" ", "_");
+				items.put(key, item);
+			}
+			return items;
+		}
+		return null;
+	}
+ 
 	@Override
 	public List<MethodBuilder> getActionMethods(Control control) {
 		List<MethodBuilder> forReturn = new ArrayList<>();
