@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
 import org.jboss.reddeer.codegen.CodeGen;
 import org.jboss.reddeer.codegen.builder.MethodBuilder;
+import org.jboss.reddeer.codegen.wizards.MethodsPage;
 import org.jboss.reddeer.swt.generator.framework.rules.RedDeerUtils;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ComboRule;
 
@@ -22,6 +23,11 @@ import org.jboss.reddeer.swt.generator.framework.rules.simple.ComboRule;
 public class ComboCodeGenRule extends ComboRule implements CodeGen {
 
 	private String suffix = "CMB";
+	private List<String> forReturn;
+
+	public ComboCodeGenRule() {
+		forReturn = new ArrayList<>();
+	}
 
 	@Override
 	public boolean appliesTo(Event event) {
@@ -51,7 +57,8 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		}
 		String ref = RedDeerUtils.getReferencedCompositeString(getComposites());
 		return MethodBuilder.method().returnType(type).get(label + suffix)
-				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")");
+				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")")
+				.type(MethodsPage.CONSTRUCTOR);
 	}
 
 	/**
@@ -64,7 +71,8 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		} else {
 			label = "\"" + label + "\"";
 		}
-		return MethodBuilder.method().returnType("String").get("Text" + label).command(getCommand("get"));
+		return MethodBuilder.method().returnType("String").get("Text" + label).returnCommand(getCommand("get"))
+				.type(MethodsPage.GETTER);
 	}
 
 	public MethodBuilder getSelection(Control control) {
@@ -74,7 +82,8 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		} else {
 			label = "\"" + label + "\"";
 		}
-		return MethodBuilder.method().returnType("String").get("Selection" + label).command(getCommand("getSelection"));
+		return MethodBuilder.method().returnType("String").get("Selection" + label)
+				.returnCommand(getCommand("getSelection")).type(MethodsPage.GETTER);
 	}
 
 	public MethodBuilder getItems(Control control) {
@@ -84,7 +93,8 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		} else {
 			label = "\"" + label + "\"";
 		}
-		return MethodBuilder.method().returnType("List<String>").get("Items" + label).command(getCommand("items"));
+		return MethodBuilder.method().returnType("List<String>").get("Items" + label).returnCommand(getCommand("items"))
+				.type(MethodsPage.GETTER);
 	}
 
 	public MethodBuilder setSelection(Control control) {
@@ -95,13 +105,13 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 			label = "\"" + label + "\"";
 		}
 		return MethodBuilder.method().name("setSelection " + label).parameter("String str")
-				.command(getCommand("setSelection"));
+				.command(getCommand("setSelection")).type(MethodsPage.SETTER);
 	}
-	
+
 	public Map<String, String> getSelectionList(Control control) {
 		Combo combo = ((Combo) control);
 		Map<String, String> items = new TreeMap<>();
-		if(combo.getItemCount() > 0) {
+		if (combo.getItemCount() > 0) {
 			for (String item : combo.getItems()) {
 				String key = WidgetUtils.cleanText(item).toUpperCase().replaceAll(" ", "_");
 				items.put(key, item);
@@ -110,7 +120,16 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		}
 		return null;
 	}
- 
+
+	@Override
+	public List<String> getImports() {
+		forReturn = super.getImports();
+		// isn't right –> shouldn't be added when get method isn't in
+		// ClassBuilder ...
+		forReturn.add("java.util.List");
+		return forReturn;
+	}
+
 	@Override
 	public List<MethodBuilder> getActionMethods(Control control) {
 		List<MethodBuilder> forReturn = new ArrayList<>();

@@ -24,6 +24,15 @@ public interface CodeGen {
 	MethodBuilder constructor(Control control);
 
 	/**
+	 * Returns lookup getter for a given control/widget
+	 * 
+	 * @param control
+	 *            control/widget
+	 * @return lookup getter for a given control/widget
+	 */
+	MethodBuilder get(Control control);
+
+	/**
 	 * Returns list of actions methods for given control/widget
 	 * 
 	 * @param control

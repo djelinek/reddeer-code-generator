@@ -8,11 +8,12 @@ import java.util.List;
  * 
  * @author djelinek
  */
-public class MethodBuilder {
+public class MethodBuilder implements Comparable<MethodBuilder> {
 
 	private String name;
 	private String visibility;
 	private String returnType;
+	private String type;
 	private List<String> parameters;
 	private List<String> commands;
 
@@ -79,6 +80,15 @@ public class MethodBuilder {
 	public MethodBuilder returnType(String type) {
 		this.returnType = type;
 		return this;
+	}
+
+	public MethodBuilder type(String type) {
+		this.type = type;
+		return this;
+	}
+
+	public String getMethodType() {
+		return this.type;
 	}
 
 	/**
@@ -157,23 +167,6 @@ public class MethodBuilder {
 		return name;
 	}
 
-	public String getMethodType() {
-		if (name.startsWith("get"))
-			try {
-				if (name.substring(0, 7).equals("getText") || name.substring(0, 8).equals("getItems")
-						|| name.substring(0, 12).equals("getSelection"))
-					return "Getter";
-				else
-					return "Constructor";
-			} catch (Exception e) {
-				return "Constructor";
-			}
-		else if (name.startsWith("setText") || name.startsWith("setSelection"))
-			return "Setter";
-		else
-			return "Action method";
-	}
-
 	private String methodNameMask(String name) {
 		String[] words = name
 				.replaceAll("[\\d\\'\\+\\-\\:\\;\\(\\)\\[\\]\\{\\}\\~\\^\\*\\&\\#\\@\\$\\<\\>\\,\\_\\.\\\"]", "")
@@ -230,6 +223,15 @@ public class MethodBuilder {
 		if (name == other.name)
 			return true;
 		return false;
+	}
+
+	@Override
+	public int compareTo(MethodBuilder o) {
+		if (this.name.charAt(0) < o.name.charAt(0)) {
+			return -1;
+		} else {
+			return 1;
+		}
 	}
 
 }

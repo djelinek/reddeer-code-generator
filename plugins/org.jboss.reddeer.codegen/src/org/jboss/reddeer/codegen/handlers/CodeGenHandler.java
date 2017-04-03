@@ -7,12 +7,13 @@ import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.PageChangingEvent;
-import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.jboss.reddeer.codegen.Generator;
@@ -54,7 +55,8 @@ public class CodeGenHandler extends AbstractHandler {
 			if (sh.getText() == "Red Deer CodeGen")
 				return;
 		}
-		IWizard wizard = new CodeGenWizard();
+		INewWizard wizard = new CodeGenWizard();
+		wizard.init(window.getWorkbench(), (IStructuredSelection) window.getSelectionService().getSelection());
 		WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 		dialog.setMinimumPageSize(150, 350);
 

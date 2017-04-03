@@ -1,9 +1,12 @@
 package org.jboss.reddeer.codegen.builder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import org.jboss.reddeer.codegen.wizards.MethodsPage;
 
 /**
  * 
@@ -189,7 +192,7 @@ public class ClassBuilder {
 	}
 
 	public void addConstants(Map<String, String> map) {
-		if(map != null)
+		if (map != null)
 			this.constants.putAll(map);
 	}
 
@@ -207,9 +210,9 @@ public class ClassBuilder {
 		if (!imports.isEmpty())
 			classBuilder.append(NEW_LINE);
 		// create head of class
-		if (extendible && selectedOptionals.contains("Allow inheriting"))
+		if (extendible && selectedOptionals.contains(MethodsPage.INHERITING))
 			classBuilder.append(visibility).append(SPACE).append("class").append(SPACE).append(getClassName(className))
-					.append(SPACE).append("extends").append(SPACE).append(this.extendedClass).append(SPACE).append("{");
+					.append(SPACE).append("extends").append(SPACE).append(extendedClass).append(SPACE).append("{");
 		else
 			classBuilder.append(visibility).append(SPACE).append("class").append(SPACE).append(getClassName(className))
 					.append(SPACE).append("{");
@@ -221,7 +224,8 @@ public class ClassBuilder {
 			}
 		}
 		// class methods
-		classBuilder.append(D_NEW_LINE).append(TAB).append("// Generated class methods").append(NEW_LINE);
+		Collections.sort(methods);
+		classBuilder.append(D_NEW_LINE).append(TAB).append("// Generated class methods").append(D_NEW_LINE);
 		for (MethodBuilder method : methods) {
 			classBuilder.append(method.toString()).append(D_NEW_LINE);
 		}
@@ -241,8 +245,7 @@ public class ClassBuilder {
 				extendible = true;
 			}
 		}
-		if (extendible && selectedOptionals.contains("Allow inheriting")) {
-			imports.add("org.jboss.reddeer.jface.wizard." + this.extendedClass);
+		if (extendible && selectedOptionals.contains(MethodsPage.INHERITING)) {
 			for (MethodBuilder rm : toRemove) {
 				methods.remove(rm);
 			}

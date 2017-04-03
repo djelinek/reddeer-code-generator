@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
 import org.jboss.reddeer.codegen.CodeGen;
 import org.jboss.reddeer.codegen.builder.MethodBuilder;
+import org.jboss.reddeer.codegen.wizards.MethodsPage;
 import org.jboss.reddeer.swt.generator.framework.rules.RedDeerUtils;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ButtonRule;
 
@@ -38,8 +39,10 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		String ref = RedDeerUtils.getReferencedCompositeString(getComposites());
 		if (!ref.isEmpty())
 			suffix = suffix + "group";
+
 		return MethodBuilder.method().returnType(type).get(label + suffix)
-				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")");
+				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")")
+				.type(MethodsPage.CONSTRUCTOR);
 	}
 
 	public MethodBuilder action(Control control) {
@@ -57,9 +60,10 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 
 		if (actionText.equals(".toggle"))
 			return MethodBuilder.method().name(actionText + " " + WidgetUtils.cleanText(label) + suffix)
-					.parameter("boolean choice").command(comm);
+					.parameter("boolean choice").command(comm).type(MethodsPage.ACTION);
 		else
-			return MethodBuilder.method().name(actionText + " " + WidgetUtils.cleanText(label) + suffix).command(comm);
+			return MethodBuilder.method().name(actionText + " " + WidgetUtils.cleanText(label) + suffix).command(comm)
+					.type(MethodsPage.ACTION);
 	}
 
 	public MethodBuilder get(Control control) {
@@ -69,7 +73,8 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		} else {
 			label = "\"" + label + "\"";
 		}
-		return MethodBuilder.method().returnType("String").get("Text" + label).command(getCommand("get"));
+		return MethodBuilder.method().returnType("String").get("Text" + label).returnCommand(getCommand("get"))
+				.type(MethodsPage.GETTER);
 	}
 
 	@Override

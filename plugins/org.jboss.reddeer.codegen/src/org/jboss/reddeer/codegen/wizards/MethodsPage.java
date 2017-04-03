@@ -34,6 +34,14 @@ public class MethodsPage extends NewTypeWizardPage {
 	private MethodStubsSelectionButtonGroup fMethodOptionalStubsButtons;
 	private MethodStubsSelectionButtonGroup fMethodBasicStubsButtons;
 
+	public static final String GETTER = "Getter";
+	public static final String SETTER = "Setter";
+	public static final String CONSTRUCTOR = "Constructor";
+	public static final String ACTION = "Action method";
+	public static final String INHERITING = "Allow inheriting";
+	public static final String CONSTANTS = "Generate static constants";
+	public static final String INCLUDE_ALL = "Include all widgets (all wizard pages)";
+
 	/**
 	 * Constructor for MethodsPage.
 	 * 
@@ -49,10 +57,10 @@ public class MethodsPage extends NewTypeWizardPage {
 		this.selection = selection;
 		this.classBuilder = builder;
 		selectedOptional = new ArrayList<String>();
-		selectedOptional.add("Constructor");
-		selectedOptional.add("Getter");
-		// selectedOptional.add("Allow inheriting");
-		selectedOptional.add("Action method");
+		selectedOptional.add(CONSTRUCTOR);
+		selectedOptional.add(GETTER);
+		// selectedOptional.add(INHERITING);
+		selectedOptional.add(ACTION);
 		setPageComplete(false);
 	}
 
@@ -67,7 +75,7 @@ public class MethodsPage extends NewTypeWizardPage {
 		layout.numColumns = nColumns;
 		composite.setLayout(layout);
 
-		String[] basicButtonNames = new String[] { "Constructor" };
+		String[] basicButtonNames = new String[] { CONSTRUCTOR };
 		fMethodBasicStubsButtons = new MethodStubsSelectionButtonGroup(SWT.CHECK, basicButtonNames, 1) {
 			@Override
 			protected void doWidgetSelected(SelectionEvent e) {
@@ -77,8 +85,7 @@ public class MethodsPage extends NewTypeWizardPage {
 			}
 		};
 
-		String[] optionalButtonNames = new String[] { "Getter", "Setter", "Allow inheriting", "Action method",
-				"Include all widgets (all wizard pages)", "Generate static constants" };
+		String[] optionalButtonNames = new String[] { GETTER, SETTER, INHERITING, ACTION, INCLUDE_ALL, CONSTANTS };
 		fMethodOptionalStubsButtons = new MethodStubsSelectionButtonGroup(SWT.CHECK, optionalButtonNames, 1) {
 			@Override
 			protected void doWidgetSelected(SelectionEvent e) {

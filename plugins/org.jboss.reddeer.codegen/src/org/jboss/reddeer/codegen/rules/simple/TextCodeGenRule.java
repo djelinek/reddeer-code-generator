@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
 import org.jboss.reddeer.codegen.CodeGen;
 import org.jboss.reddeer.codegen.builder.MethodBuilder;
+import org.jboss.reddeer.codegen.wizards.MethodsPage;
 import org.jboss.reddeer.swt.generator.framework.rules.RedDeerUtils;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.TextRule;
 
@@ -49,7 +50,8 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 		}
 		String ref = RedDeerUtils.getReferencedCompositeString(RedDeerUtils.getComposites(control));
 		return MethodBuilder.method().returnType(type).get(label + suffix)
-				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")");
+				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")")
+				.type(MethodsPage.CONSTRUCTOR);
 	}
 
 	public MethodBuilder set(Control control) {
@@ -59,7 +61,8 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 		} else {
 			label = "\"" + label + "\"";
 		}
-		return MethodBuilder.method().name("setText " + label).parameter("String str").command(getCommand("set"));
+		return MethodBuilder.method().name("setText " + label).parameter("String str").command(getCommand("set"))
+				.type(MethodsPage.SETTER);
 	}
 
 	public MethodBuilder get(Control control) {
@@ -69,7 +72,8 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 		} else {
 			label = "\"" + label + "\"";
 		}
-		return MethodBuilder.method().returnType("String").get("Text" + label).command(getCommand("get"));
+		return MethodBuilder.method().returnType("String").get("Text" + label).returnCommand(getCommand("get"))
+				.type(MethodsPage.GETTER);
 	}
 
 	@Override

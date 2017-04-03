@@ -17,6 +17,7 @@ import org.jboss.reddeer.codegen.rules.simple.ButtonCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.ComboCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.ShellCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.TextCodeGenRule;
+import org.jboss.reddeer.codegen.wizards.MethodsPage;
 import org.jboss.reddeer.core.lookup.ShellLookup;
 
 /**
@@ -38,25 +39,43 @@ public class Generator {
 		this.options = optional;
 	}
 
+	public Control getShellControl() {
+		Shell[] sh = ShellLookup.getInstance().getShells();
+		return sh[sh.length - 2];
+	}
+
 	public Control getControl() {
 		Shell[] sh = ShellLookup.getInstance().getShells();
 		Control[] c = sh[sh.length - 2].getChildren();
 		Object o = sh[sh.length - 2].getData();
-		if (o instanceof WizardDialog) {
-			classBuilder.setExtendedClass("NewWizardDialog");
-			return ((WizardDialog) o).getCurrentPage().getControl();
-		} else if (o instanceof WorkbenchPreferenceDialog) {
-			classBuilder.setExtendedClass("PreferenceDialog");
-			return ((WorkbenchPreferenceDialog) o).getCurrentPage().getControl();
-		} else
+		if (!options.contains(MethodsPage.INCLUDE_ALL)) {
+			if (o instanceof WizardDialog) {
+				// classBuilder.addImport("org.jboss.reddeer.jface.wizard.WizardDialog");
+				// classBuilder.setExtendedClass("WizardDialog");
+				return ((WizardDialog) o).getCurrentPage().getControl();
+			} else if (o instanceof WorkbenchPreferenceDialog) {
+				// classBuilder.addImport("org.jboss.reddeer.jface.wizard.PreferenceDialog");
+				// classBuilder.setExtendedClass("PreferenceDialog");
+				return ((WorkbenchPreferenceDialog) o).getCurrentPage().getControl();
+			} else
+				return c[0];
+		} else {
+			if (o instanceof WizardDialog) {
+				classBuilder.addImport("org.jboss.reddeer.jface.wizard.WizardDialog");
+				classBuilder.setExtendedClass("WizardDialog");
+			} else if (o instanceof WorkbenchPreferenceDialog) {
+				classBuilder.addImport("org.jboss.reddeer.jface.wizard.PreferenceDialog");
+				classBuilder.setExtendedClass("PreferenceDialog");
+			}
 			return c[0];
+		}
 	}
 
 	public ClassBuilder generateCode() {
-
 		classBuilder.addOptionals(options);
 		classBuilder.clearImports();
 		List<Control> controls = controlFinder.find(getControl(), new IsInstanceOf(Control.class));
+		controls.add(getShellControl());
 		List<GenerationSimpleRule> simples = new CodeGenRules().createSimpleRules();
 		Event e = new Event();
 		for (Control control : controls) {
@@ -82,10 +101,11 @@ public class Generator {
 					}
 				} else if (rule instanceof ComboCodeGenRule) {
 					for (MethodBuilder meth : ((ComboCodeGenRule) rule).getActionMethods(control)) {
+						if (options.contains(MethodsPage.CONSTANTS))
+							classBuilder.addConstants(((ComboCodeGenRule) rule).getSelectionList(control));
 						if (options.contains(meth.getMethodType())) {
 							classBuilder.addMethod(meth);
 							classBuilder.addImports(rule.getImports());
-							classBuilder.addConstants(((ComboCodeGenRule) rule).getSelectionList(control));
 						}
 					}
 				} else if (rule instanceof ShellCodeGenRule) {

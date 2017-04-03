@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.ui.wizards.NewTypeWizardPage;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -43,7 +44,7 @@ public class FirstPage extends NewTypeWizardPage {
 	 * @see IDialogPage#createControl(Composite)
 	 */
 	@Override
-	public void createControl(final Composite parent) {
+	public void createControl(Composite parent) {
 
 		initializeDialogUnits(parent);
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -56,6 +57,7 @@ public class FirstPage extends NewTypeWizardPage {
 		createPackageControls(composite, nColumns);
 		createSeparator(composite, nColumns);
 		createTypeNameControls(composite, nColumns);
+
 		setTypeName("DefaultCodeGen", true);
 		setControl(composite);
 		// restoreWidgetValues();
@@ -64,7 +66,6 @@ public class FirstPage extends NewTypeWizardPage {
 
 	@Override
 	public boolean canFlipToNextPage() {
-
 		if (!getPackageFragmentRootText().isEmpty() && !getPackageText().isEmpty() && !getTypeName().isEmpty()) {
 			return true;
 		} else {
