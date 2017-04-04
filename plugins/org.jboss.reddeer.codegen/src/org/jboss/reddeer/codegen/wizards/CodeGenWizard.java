@@ -15,17 +15,16 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.internal.ui.wizards.NewElementWizard;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.INewWizard;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.internal.dialogs.NewWizard;
 import org.jboss.reddeer.codegen.builder.ClassBuilder;
 import org.jboss.reddeer.common.logging.Logger;
 import org.jboss.reddeer.common.util.Display;
@@ -35,9 +34,11 @@ import org.jboss.reddeer.common.util.Display;
  * @author djelinek
  */
 @SuppressWarnings("restriction")
-public class CodeGenWizard extends NewWizard implements INewWizard {
+public class CodeGenWizard extends NewElementWizard implements INewWizard {
 
 	private final Logger log = Logger.getLogger(CodeGenWizard.class);
+	
+	private static final String JAVA_SUFFIX = ".java";
 
 	private FirstPage firstPage;
 	private MethodsPage methodsPage;
@@ -45,7 +46,7 @@ public class CodeGenWizard extends NewWizard implements INewWizard {
 	private ISelection selection;
 	private ClassBuilder classBuilder;
 	private boolean ans = false;
-
+	
 	/**
 	 * Constructor for CodeGenWizard.
 	 */
@@ -56,11 +57,6 @@ public class CodeGenWizard extends NewWizard implements INewWizard {
 		classBuilder = new ClassBuilder();
 	}
 
-	@Override
-	public void init(IWorkbench aWorkbench, IStructuredSelection currentSelection) {
-		super.init(aWorkbench, currentSelection);
-	}
-
 	/**
 	 * Adding the page to the wizard.
 	 */
@@ -68,6 +64,9 @@ public class CodeGenWizard extends NewWizard implements INewWizard {
 		methodsPage = new MethodsPage(selection, classBuilder);
 		firstPage = new FirstPage(selection, methodsPage);
 		previewPage = new PreviewPage(selection);
+		
+		firstPage.init(getSelection());
+		
 		addPage(firstPage);
 		addPage(methodsPage);
 		addPage(previewPage);
@@ -182,13 +181,23 @@ public class CodeGenWizard extends NewWizard implements INewWizard {
 
 	private String getFileName(String name) {
 		try {
-			if (name.substring(name.lastIndexOf("."), name.length()).equals(".java"))
+			if (name.substring(name.lastIndexOf("."), name.length()).equals(JAVA_SUFFIX))
 				return name;
 			else
-				return name + ".java";
+				return name + JAVA_SUFFIX;
 		} catch (Exception e) {
-			return name + ".java";
+			return name + JAVA_SUFFIX;
 		}
+	}
+
+	@Override
+	protected void finishPage(IProgressMonitor monitor) throws InterruptedException, CoreException {
+		firstPage.createType(monitor); // use the full progress monitor		
+	}
+
+	@Override
+	public IJavaElement getCreatedElement() {
+		return firstPage.getCreatedType();
 	}
 
 }

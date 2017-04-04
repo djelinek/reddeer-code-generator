@@ -5,7 +5,10 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.ui.wizards.NewTypeWizardPage;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogPage;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -21,8 +24,11 @@ import org.jboss.reddeer.codegen.Activator;
  */
 public class FirstPage extends NewTypeWizardPage {
 
+	private final static String PAGE_NAME= "codeGenWizardPageOne";
+	
 	private ISelection selection;
 	private MethodsPage methodsPage;
+	private IJavaElement jelem;
 
 	/**
 	 * Constructor for FirstWizardPage.
@@ -30,14 +36,38 @@ public class FirstPage extends NewTypeWizardPage {
 	 * @param pageName
 	 */
 	public FirstPage(ISelection selection, MethodsPage methodsPage) {
-		super(true, "codeGenWizardPageOne");
+		super(true, PAGE_NAME);
 		this.setTitle("Class definition");
 		this.setDescription("This wizard allows generate a new CodeGen class with *.java");
 		this.setImageDescriptor(ImageDescriptor.createFromURL(
 				FileLocator.find(Platform.getBundle(Activator.PLUGIN_ID), new Path("icons/reddeer_logo.png"), null)));
 		this.selection = selection;
 		this.methodsPage = methodsPage;
-		setPageComplete(false);
+	}
+	
+	/**
+	 * The wizard owning this page is responsible for calling this method with the
+	 * current selection. The selection is used to initialize the fields of the wizard
+	 * page.
+	 *
+	 * @param selection used to initialize the fields
+	 */
+	public void init(IStructuredSelection selection) {
+		jelem = getInitialJavaElement(selection);
+	}
+	
+	private void doStatusUpdate() {
+		// all used component status
+		IStatus[] status= new IStatus[] {
+			fContainerStatus,
+			isEnclosingTypeSelected() ? fEnclosingTypeStatus : fPackageStatus,
+			fTypeNameStatus,
+			fModifierStatus,
+			fSuperInterfacesStatus
+		};
+
+		// the mode severe status will be displayed and the OK button enabled/disabled.
+		updateStatus(status);
 	}
 
 	/**
@@ -53,15 +83,21 @@ public class FirstPage extends NewTypeWizardPage {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = nColumns;
 		composite.setLayout(layout);
-		createContainerControls(composite, nColumns);
+		createContainerControls(composite, nColumns);	
 		createPackageControls(composite, nColumns);
 		createSeparator(composite, nColumns);
 		createTypeNameControls(composite, nColumns);
 
-		setTypeName("DefaultCodeGen", true);
 		setControl(composite);
-		// restoreWidgetValues();
-		Dialog.applyDialogFont(composite);
+		
+		initContainerPage(jelem);
+		initTypePage(jelem);
+		setTypeName("DefaultCodeGen", true);
+		
+		doStatusUpdate();
+	
+		Dialog.applyDialogFont(composite);	
+		setPageComplete(false);
 	}
 
 	@Override
@@ -87,6 +123,7 @@ public class FirstPage extends NewTypeWizardPage {
 			methodsPage.getClassBuilder().setPackage(getPackageText());
 			// updateStatus(packageChanged());
 		}
+		//doStatusUpdate();
 		dialogChanged();
 		getContainer().updateButtons();
 		super.handleFieldChanged(fieldName);
