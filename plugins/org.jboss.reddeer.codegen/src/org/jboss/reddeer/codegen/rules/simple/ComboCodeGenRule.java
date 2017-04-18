@@ -58,7 +58,7 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		String ref = RedDeerUtils.getReferencedCompositeString(getComposites());
 		return MethodBuilder.method().returnType(type).get(label + suffix)
 				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")")
-				.type(MethodsPage.CONSTRUCTOR);
+				.type(MethodsPage.GETTER);
 	}
 
 	/**

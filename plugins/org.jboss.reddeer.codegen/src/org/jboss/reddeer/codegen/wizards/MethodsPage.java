@@ -32,11 +32,9 @@ public class MethodsPage extends NewTypeWizardPage {
 	private ClassBuilder classBuilder;
 
 	private MethodStubsSelectionButtonGroup fMethodOptionalStubsButtons;
-	private MethodStubsSelectionButtonGroup fMethodBasicStubsButtons;
 
 	public static final String GETTER = "Getter";
 	public static final String SETTER = "Setter";
-	public static final String CONSTRUCTOR = "Constructor";
 	public static final String ACTION = "Action method";
 	public static final String INHERITING = "Allow inheriting";
 	public static final String CONSTANTS = "Generate static constants";
@@ -57,10 +55,12 @@ public class MethodsPage extends NewTypeWizardPage {
 		this.selection = selection;
 		this.classBuilder = builder;
 		selectedOptional = new ArrayList<String>();
-		selectedOptional.add(CONSTRUCTOR);
 		selectedOptional.add(GETTER);
-		// selectedOptional.add(INHERITING);
+		selectedOptional.add(SETTER);
+		selectedOptional.add(INHERITING);
 		selectedOptional.add(ACTION);
+		// selectedOptional.add(INCLUDE_ALL);
+		selectedOptional.add(CONSTANTS);
 		setPageComplete(false);
 	}
 
@@ -75,16 +75,6 @@ public class MethodsPage extends NewTypeWizardPage {
 		layout.numColumns = nColumns;
 		composite.setLayout(layout);
 
-		String[] basicButtonNames = new String[] { CONSTRUCTOR };
-		fMethodBasicStubsButtons = new MethodStubsSelectionButtonGroup(SWT.CHECK, basicButtonNames, 1) {
-			@Override
-			protected void doWidgetSelected(SelectionEvent e) {
-				super.doWidgetSelected(e);
-				// saveWidgetValues();
-				handleSelectedOptional(e);
-			}
-		};
-
 		String[] optionalButtonNames = new String[] { GETTER, SETTER, INHERITING, ACTION, INCLUDE_ALL, CONSTANTS };
 		fMethodOptionalStubsButtons = new MethodStubsSelectionButtonGroup(SWT.CHECK, optionalButtonNames, 1) {
 			@Override
@@ -96,10 +86,12 @@ public class MethodsPage extends NewTypeWizardPage {
 		};
 
 		createMethodStubSelectionControls(composite, nColumns);
-		fMethodBasicStubsButtons.setSelection(0, true);
 		fMethodOptionalStubsButtons.setSelection(0, true);
-		// fMethodOptionalStubsButtons.setSelection(2, true);
+		fMethodOptionalStubsButtons.setSelection(1, true);
+		fMethodOptionalStubsButtons.setSelection(2, true);
 		fMethodOptionalStubsButtons.setSelection(3, true);
+		// fMethodOptionalStubsButtons.setSelection(4, true);
+		fMethodOptionalStubsButtons.setSelection(5, true);
 		setControl(composite);
 		Dialog.applyDialogFont(composite);
 	}
@@ -119,12 +111,6 @@ public class MethodsPage extends NewTypeWizardPage {
 
 	protected void createMethodStubSelectionControls(Composite composite, int nColumns) {
 		LayoutUtil.createEmptySpace(composite, nColumns);
-		// LayoutUtil.setHorizontalSpan(fMethodBasicStubsButtons.getLabelControl(composite),
-		// nColumns);
-		LayoutUtil.setHorizontalSpan(fMethodBasicStubsButtons.getSelectionButtonsGroup(composite), nColumns - 1);
-		createSeparator(composite, nColumns);
-		// LayoutUtil.setHorizontalSpan(fMethodOptionalStubsButtons.getLabelControl(composite),
-		// nColumns);
 		LayoutUtil.setHorizontalSpan(fMethodOptionalStubsButtons.getSelectionButtonsGroup(composite), nColumns - 1);
 	}
 

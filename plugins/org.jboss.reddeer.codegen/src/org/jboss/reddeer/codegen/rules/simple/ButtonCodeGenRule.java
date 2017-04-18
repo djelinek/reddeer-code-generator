@@ -42,7 +42,7 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 
 		return MethodBuilder.method().returnType(type).get(label + suffix)
 				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")")
-				.type(MethodsPage.CONSTRUCTOR);
+				.type(MethodsPage.GETTER);
 	}
 
 	public MethodBuilder action(Control control) {

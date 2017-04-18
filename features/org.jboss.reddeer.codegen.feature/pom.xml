@@ -44,5 +44,5 @@
 		</plugins>
 	</build>
 
-
+	<description>Red Deer Code Generator (RedDeer CodeGen)</description>
 </project>

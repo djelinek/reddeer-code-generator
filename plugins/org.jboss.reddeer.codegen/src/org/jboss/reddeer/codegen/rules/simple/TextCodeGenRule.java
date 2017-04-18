@@ -51,7 +51,7 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 		String ref = RedDeerUtils.getReferencedCompositeString(RedDeerUtils.getComposites(control));
 		return MethodBuilder.method().returnType(type).get(label + suffix)
 				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")")
-				.type(MethodsPage.CONSTRUCTOR);
+				.type(MethodsPage.GETTER);
 	}
 
 	public MethodBuilder set(Control control) {

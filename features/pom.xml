@@ -11,8 +11,7 @@
 	<artifactId>features</artifactId>
 	<name>RedDeer CodeGen Features</name>
 	<packaging>pom</packaging>
-
-
+	
 	<modules>
 		<module>org.jboss.reddeer.codegen.feature</module>
 	</modules>

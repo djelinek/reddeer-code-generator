@@ -26,7 +26,7 @@ public class ShellCodeGenRule extends ShellRule implements CodeGen {
 	public MethodBuilder constructor(Control control) {
 		String title = "\"" + getShellTitle() + "\"";
 		return MethodBuilder.method().returnType("DefaultShell").name("activate")
-				.returnCommand("new DefaultShell(" + title + ")").type(MethodsPage.CONSTRUCTOR);
+				.returnCommand("new DefaultShell(" + title + ")").type(MethodsPage.GETTER);
 	}
 
 	@Override
