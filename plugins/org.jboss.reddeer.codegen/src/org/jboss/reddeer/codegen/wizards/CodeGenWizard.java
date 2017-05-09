@@ -26,8 +26,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.jboss.reddeer.codegen.builder.ClassBuilder;
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.common.util.Display;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.common.util.Display;
 
 /**
  * Parent RedDeer CodeGen wizard class

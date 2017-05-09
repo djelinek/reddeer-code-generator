@@ -10,7 +10,7 @@ import org.eclipse.swtbot.generator.framework.WidgetUtils;
 import org.jboss.reddeer.codegen.CodeGen;
 import org.jboss.reddeer.codegen.builder.MethodBuilder;
 import org.jboss.reddeer.codegen.wizards.MethodsPage;
-import org.jboss.reddeer.swt.generator.framework.rules.simple.ShellRule;
+import org.eclipse.reddeer.swt.generator.framework.rules.simple.ShellRule;
 
 /**
  * RedDeer CodeGen rules for Shell widget/control.

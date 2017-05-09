@@ -1,6 +1,6 @@
 package org.jboss.reddeer.codegen.junit.test.builders;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.jboss.reddeer.codegen.builder.MethodBuilder;
 import org.junit.Before;

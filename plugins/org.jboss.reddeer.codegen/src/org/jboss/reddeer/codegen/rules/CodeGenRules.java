@@ -8,7 +8,7 @@ import org.jboss.reddeer.codegen.rules.simple.ButtonCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.ComboCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.ShellCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.TextCodeGenRule;
-import org.jboss.reddeer.swt.generator.framework.rules.RedDeerSWTGeneratorRules;
+import org.eclipse.reddeer.swt.generator.framework.rules.RedDeerSWTGeneratorRules;
 
 /**
  * This class contains all available rules for RedDeer CodeGen.

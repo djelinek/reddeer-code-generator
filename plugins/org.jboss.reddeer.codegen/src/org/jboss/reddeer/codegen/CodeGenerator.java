@@ -18,7 +18,7 @@ import org.jboss.reddeer.codegen.rules.simple.ComboCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.ShellCodeGenRule;
 import org.jboss.reddeer.codegen.rules.simple.TextCodeGenRule;
 import org.jboss.reddeer.codegen.wizards.MethodsPage;
-import org.jboss.reddeer.core.lookup.ShellLookup;
+import org.eclipse.reddeer.core.lookup.ShellLookup;
 
 /**
  * Class for generating source code for all supported widget rules. This class

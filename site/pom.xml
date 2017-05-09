@@ -57,64 +57,59 @@
 					<ius>
 						<!-- RedDeer bundles -->
 						<iu>
-							<id>org.jboss.reddeer.eclipse.feature.feature.group</id>
+							<id>org.eclipse.reddeer.eclipse.feature.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.eclipse.feature.source.feature.group</id>
+							<id>org.eclipse.reddeer.eclipse.feature.source.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.gef.spy.feature.feature.group</id>
+							<id>org.eclipse.reddeer.gef.spy.feature.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.graphiti.feature.feature.group</id>
+							<id>org.eclipse.reddeer.graphiti.feature.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.graphiti.feature.source.feature.group</id>
+							<id>org.eclipse.reddeer.graphiti.feature.source.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.junit.extension.feature.feature.group</id>
+							<id>org.eclipse.reddeer.junit.extension.feature.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.junit.extension.feature.source.feature.group</id>
+							<id>org.eclipse.reddeer.junit.extension.feature.source.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.logparser.feature.feature.group</id>
+							<id>org.eclipse.reddeer.logparser.feature.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.logparser.feature.source.feature.group</id>
+							<id>org.eclipse.reddeer.logparser.feature.source.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.recorder.feature.feature.group</id>
+							<id>org.eclipse.reddeer.recorder.feature.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.recorder.feature.source.feature.group</id>
+							<id>org.eclipse.reddeer.recorder.feature.source.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.selenium.feature.feature.group</id>
+							<id>org.eclipse.reddeer.spy.feature.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.spy.feature.feature.group</id>
+							<id>org.eclipse.reddeer.swt.feature.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.swt.feature.feature.group</id>
+							<id>org.eclipse.reddeer.swt.feature.source.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.swt.feature.source.feature.group</id>
+							<id>org.eclipse.reddeer.ui.feature.feature.group</id>
 						</iu>
 						<iu>
-							<id>org.jboss.reddeer.tests.feature.feature.group</id>
+							<id>org.eclipse.reddeer.ui.feature.source.feature.group</id>
 						</iu>
-						<iu>
-							<id>org.jboss.reddeer.tests.feature.source.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.jboss.reddeer.ui.feature.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.jboss.reddeer.ui.feature.source.feature.group</id>
-						</iu>
+						<!-- SWTBot bundles -->
 						<iu>
 							<id>org.eclipse.swtbot.generator.feature.feature.group</id>
+						</iu>
+						<iu>
+							<id>org.eclipse.swtbot.generator.feature.source.feature.group</id>
 						</iu>
 					</ius>
 					<!-- The destination directory to mirror to. -->

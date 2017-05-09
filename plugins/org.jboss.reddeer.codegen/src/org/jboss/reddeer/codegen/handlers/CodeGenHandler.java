@@ -21,8 +21,8 @@ import org.jboss.reddeer.codegen.wizards.CodeGenWizard;
 import org.jboss.reddeer.codegen.wizards.FirstPage;
 import org.jboss.reddeer.codegen.wizards.MethodsPage;
 import org.jboss.reddeer.codegen.wizards.PreviewPage;
-import org.jboss.reddeer.common.logging.Logger;
-import org.jboss.reddeer.core.lookup.ShellLookup;
+import org.eclipse.reddeer.common.logging.Logger;
+import org.eclipse.reddeer.core.lookup.ShellLookup;
 
 /**
  * Handler for RedDeer Code Generator wizard pages
