@@ -7,7 +7,11 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.ui.wizards.NewTypeWizardPage;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.internal.ui.wizards.NewWizardMessages;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogPage;
@@ -19,13 +23,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.jboss.reddeer.codegen.Activator;
 
 /**
+ * This class represents first RedDeer CodeGen wizard page – basic class
+ * informations
  * 
  * @author djelinek
  */
 public class FirstPage extends NewTypeWizardPage {
 
-	private final static String PAGE_NAME= "codeGenWizardPageOne";
-	
+	private final static String PAGE_NAME = "codeGenWizardPageOne";
+
 	private ISelection selection;
 	private MethodsPage methodsPage;
 	private IJavaElement jelem;
@@ -44,29 +50,28 @@ public class FirstPage extends NewTypeWizardPage {
 		this.selection = selection;
 		this.methodsPage = methodsPage;
 	}
-	
+
 	/**
-	 * The wizard owning this page is responsible for calling this method with the
-	 * current selection. The selection is used to initialize the fields of the wizard
-	 * page.
+	 * The wizard owning this page is responsible for calling this method with
+	 * the current selection. The selection is used to initialize the fields of
+	 * the wizard page.
 	 *
-	 * @param selection used to initialize the fields
+	 * @param selection
+	 *            used to initialize the fields
 	 */
 	public void init(IStructuredSelection selection) {
 		jelem = getInitialJavaElement(selection);
 	}
-	
+
 	private void doStatusUpdate() {
 		// all used component status
-		IStatus[] status= new IStatus[] {
-			fContainerStatus,
-			isEnclosingTypeSelected() ? fEnclosingTypeStatus : fPackageStatus,
-			fTypeNameStatus,
-			fModifierStatus,
-			fSuperInterfacesStatus
-		};
+		IStatus[] status = new IStatus[] { fContainerStatus,
+				isEnclosingTypeSelected() ? fEnclosingTypeStatus : fPackageStatus,
+				// fTypeNameStatus,
+				fModifierStatus, fSuperInterfacesStatus };
 
-		// the mode severe status will be displayed and the OK button enabled/disabled.
+		// the mode severe status will be displayed and the OK button
+		// enabled/disabled.
 		updateStatus(status);
 	}
 
@@ -83,20 +88,25 @@ public class FirstPage extends NewTypeWizardPage {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = nColumns;
 		composite.setLayout(layout);
-		createContainerControls(composite, nColumns);	
+		createContainerControls(composite, nColumns);
 		createPackageControls(composite, nColumns);
 		createSeparator(composite, nColumns);
 		createTypeNameControls(composite, nColumns);
-
 		setControl(composite);
-		
+
+		// initialization of FirstPage fields
 		initContainerPage(jelem);
 		initTypePage(jelem);
-		setTypeName("DefaultCodeGen", true);
-		
+		// setTypeName("DefaultCodeGen", true);
+
+		// message field status updates
+		updateStatus(containerChanged());
+		updateStatus(packageChanged());
+
+		// updateStatus(typeNameChanged());
 		doStatusUpdate();
-	
-		Dialog.applyDialogFont(composite);	
+
+		Dialog.applyDialogFont(composite);
 		setPageComplete(false);
 	}
 
@@ -113,18 +123,17 @@ public class FirstPage extends NewTypeWizardPage {
 	protected void handleFieldChanged(String fieldName) {
 
 		if (fieldName.equals(CONTAINER)) {
-			if (getPackageFragmentRootText().isEmpty() && !getPackageText().isEmpty())
-				;
-			// updateStatus(containerChanged());
+			updateStatus(containerChanged());
 		} else if (fieldName.equals(TYPENAME)) {
 			methodsPage.getClassBuilder().setClassName(getTypeName());
+			dialogChanged();
 			// updateStatus(typeNameChanged());
 		} else if (fieldName.equals(PACKAGE)) {
 			methodsPage.getClassBuilder().setPackage(getPackageText());
-			// updateStatus(packageChanged());
+			updateStatus(packageChanged());
 		}
-		//doStatusUpdate();
-		dialogChanged();
+		doStatusUpdate();
+		// dialogChanged();
 		getContainer().updateButtons();
 		super.handleFieldChanged(fieldName);
 	}
@@ -140,24 +149,7 @@ public class FirstPage extends NewTypeWizardPage {
 
 		updateStatus(containerChanged());
 		updateStatus(packageChanged());
-		updateStatus(typeNameChanged());
-
-		if (getPackageFragmentRootText().length() == 0) {
-			updateStatusMsg("Source folder must be specified");
-			return;
-		}
-		if (getPackageText().length() == 0) {
-			updateStatusMsg("Package must be specified");
-			return;
-		}
-		if (container == null || (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0) {
-			updateStatusMsg("Project must exist");
-			return;
-		}
-		if (!container.isAccessible()) {
-			updateStatusMsg("Project must be writable");
-			return;
-		}
+		// updateStatus(typeNameChanged());
 		if (fileName.length() == 0) {
 			updateStatusMsg("Class name must be specified");
 			return;
@@ -166,9 +158,29 @@ public class FirstPage extends NewTypeWizardPage {
 			updateStatusMsg("Class name must be valid");
 			return;
 		}
+		if (fileName.indexOf('.') != -1) {
+			updateStatusMsg("Class name must not be qualified.");
+			return;
+		}
+		IPackageFragment pack = getPackageFragment();
+		if (pack != null) {
+			ICompilationUnit cu = pack.getCompilationUnit(getCompilationUnitName(fileName));
+			IResource resource = cu.getResource();
+			if (resource.exists()) {
+				setMessage("This Class name already exists", SWT.ICON_WARNING);
+				setPageComplete(false);
+				return;
+			}
+		}
 		updateStatusMsg(null);
 	}
 
+	/**
+	 * Update page status message row
+	 * 
+	 * @param message
+	 *            String
+	 */
 	private void updateStatusMsg(String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);

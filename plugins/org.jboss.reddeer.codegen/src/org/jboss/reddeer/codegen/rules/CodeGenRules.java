@@ -11,6 +11,7 @@ import org.jboss.reddeer.codegen.rules.simple.TextCodeGenRule;
 import org.jboss.reddeer.swt.generator.framework.rules.RedDeerSWTGeneratorRules;
 
 /**
+ * This class contains all available rules for RedDeer CodeGen.
  * 
  * @author djelinek
  */

@@ -17,6 +17,7 @@ import org.jboss.reddeer.swt.generator.framework.rules.RedDeerUtils;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ComboRule;
 
 /**
+ * RedDeer CodeGen rules for Combo widget/control.
  * 
  * @author djelinek
  */
@@ -45,6 +46,13 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 			return false;
 	}
 
+	/**
+	 * Create constructor method
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return MethodBuilder instance
+	 */
 	@Override
 	public MethodBuilder constructor(Control control) {
 		String type = "LabeledCombo";
@@ -57,13 +65,17 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		}
 		String ref = RedDeerUtils.getReferencedCompositeString(getComposites());
 		return MethodBuilder.method().returnType(type).get(label + suffix)
-				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")")
-				.type(MethodsPage.GETTER);
+				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")").type(MethodsPage.GETTER);
 	}
 
 	/**
-	 * new LabeledCCombo(""). getSelection setSelection getText getItems
+	 * Create getter method
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return MethodBuilder instance
 	 */
+	@Override
 	public MethodBuilder get(Control control) {
 		String label = getLabel();
 		if (label == null || label.isEmpty()) {
@@ -75,6 +87,13 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 				.type(MethodsPage.GETTER);
 	}
 
+	/**
+	 * Create combo box get selection method
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return MethodBuilder instance
+	 */
 	public MethodBuilder getSelection(Control control) {
 		String label = getLabel();
 		if (label == null || label.isEmpty()) {
@@ -86,6 +105,13 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 				.returnCommand(getCommand("getSelection")).type(MethodsPage.GETTER);
 	}
 
+	/**
+	 * Create combo box get items method
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return MethodBuilder instance
+	 */
 	public MethodBuilder getItems(Control control) {
 		String label = getLabel();
 		if (label == null || label.isEmpty()) {
@@ -97,6 +123,13 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 				.type(MethodsPage.GETTER);
 	}
 
+	/**
+	 * Create combo box selection method
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return MethodBuilder instance
+	 */
 	public MethodBuilder setSelection(Control control) {
 		String label = getLabel();
 		if (label == null || label.isEmpty()) {
@@ -108,6 +141,13 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 				.command(getCommand("setSelection")).type(MethodsPage.SETTER);
 	}
 
+	/**
+	 * Return map of combo box items
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return Map<String, String>
+	 */
 	public Map<String, String> getSelectionList(Control control) {
 		Combo combo = ((Combo) control);
 		Map<String, String> items = new TreeMap<>();
@@ -130,6 +170,13 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		return forReturn;
 	}
 
+	/**
+	 * Returns lit of available/created methods
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return List<MethodBuilder>
+	 */
 	@Override
 	public List<MethodBuilder> getActionMethods(Control control) {
 		List<MethodBuilder> forReturn = new ArrayList<>();
@@ -141,6 +188,13 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		return forReturn;
 	}
 
+	/**
+	 * Return right command for getter or setter variant
+	 * 
+	 * @param type
+	 *            Getter/Setter
+	 * @return String
+	 */
 	public String getCommand(String type) {
 		StringBuffer sb = new StringBuffer();
 		String label = getLabel();

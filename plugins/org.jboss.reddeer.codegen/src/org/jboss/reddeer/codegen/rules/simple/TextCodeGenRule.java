@@ -15,6 +15,7 @@ import org.jboss.reddeer.swt.generator.framework.rules.RedDeerUtils;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.TextRule;
 
 /**
+ * RedDeer CodeGen rules for Text widget/control.
  * 
  * @author djelinek
  */
@@ -38,6 +39,13 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 			return false;
 	}
 
+	/**
+	 * Create constructor method
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return MethodBuilder instance
+	 */
 	@Override
 	public MethodBuilder constructor(Control control) {
 		String type = "LabeledText";
@@ -50,10 +58,16 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 		}
 		String ref = RedDeerUtils.getReferencedCompositeString(RedDeerUtils.getComposites(control));
 		return MethodBuilder.method().returnType(type).get(label + suffix)
-				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")")
-				.type(MethodsPage.GETTER);
+				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")").type(MethodsPage.GETTER);
 	}
 
+	/**
+	 * Create setter method
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return MethodBuilder instance
+	 */
 	public MethodBuilder set(Control control) {
 		String label = getLabel();
 		if (label == null || label.isEmpty()) {
@@ -65,6 +79,14 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 				.type(MethodsPage.SETTER);
 	}
 
+	/**
+	 * Create getter method
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return MethodBuilder instance
+	 */
+	@Override
 	public MethodBuilder get(Control control) {
 		String label = getLabel();
 		if (label == null || label.isEmpty()) {
@@ -76,6 +98,13 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 				.type(MethodsPage.GETTER);
 	}
 
+	/**
+	 * Returns lit of available/created methods
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return List<MethodBuilder>
+	 */
 	@Override
 	public List<MethodBuilder> getActionMethods(Control control) {
 		List<MethodBuilder> forReturn = new ArrayList<>();
@@ -85,6 +114,13 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 		return forReturn;
 	}
 
+	/**
+	 * Return right command for available actions (get/set)
+	 * 
+	 * @param type
+	 *            Getter/Setter
+	 * @return String
+	 */
 	public String getCommand(String type) {
 		StringBuffer sb = new StringBuffer();
 		String label = getLabel();

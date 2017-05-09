@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
+ * Class for completing and building a structure of JAVA method.
  * 
  * @author djelinek
  */
@@ -82,11 +83,23 @@ public class MethodBuilder implements Comparable<MethodBuilder> {
 		return this;
 	}
 
+	/**
+	 * Sets what kind of method will be set (CONSTRUCTOR, GETTER, SETTER, etc.)
+	 * 
+	 * @param type
+	 *            type of method
+	 * @return current code builder
+	 */
 	public MethodBuilder type(String type) {
 		this.type = type;
 		return this;
 	}
 
+	/**
+	 * Get method type
+	 * 
+	 * @return String
+	 */
 	public String getMethodType() {
 		return this.type;
 	}
@@ -163,10 +176,23 @@ public class MethodBuilder implements Comparable<MethodBuilder> {
 		return command("return " + command);
 	}
 
+	/**
+	 * Get method name
+	 * 
+	 * @return String
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Returns method name in right method name mask (right upper case and lower
+	 * case syntax)
+	 * 
+	 * @param name
+	 *            Method name
+	 * @return String
+	 */
 	private String methodNameMask(String name) {
 		String[] words = name
 				.replaceAll("[\\d\\'\\+\\-\\:\\;\\(\\)\\[\\]\\{\\}\\~\\^\\*\\&\\#\\@\\$\\<\\>\\,\\_\\.\\\"]", "")
@@ -229,8 +255,10 @@ public class MethodBuilder implements Comparable<MethodBuilder> {
 	public int compareTo(MethodBuilder o) {
 		if (this.name.charAt(0) < o.name.charAt(0)) {
 			return -1;
-		} else {
+		} else if (this.name.charAt(0) > o.name.charAt(0)) {
 			return 1;
+		} else {
+			return 0;
 		}
 	}
 

@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.jboss.reddeer.codegen.Generator;
+import org.jboss.reddeer.codegen.CodeGenerator;
 import org.jboss.reddeer.codegen.wizards.CodeGenWizard;
 import org.jboss.reddeer.codegen.wizards.FirstPage;
 import org.jboss.reddeer.codegen.wizards.MethodsPage;
@@ -25,6 +25,7 @@ import org.jboss.reddeer.common.logging.Logger;
 import org.jboss.reddeer.core.lookup.ShellLookup;
 
 /**
+ * Handler for RedDeer Code Generator wizard pages
  * 
  * @author djelinek
  */
@@ -47,6 +48,11 @@ public class CodeGenHandler extends AbstractHandler {
 		return null;
 	}
 
+	/**
+	 * Method for open RedDeer CodeGen wizard and runs all necessary listeners
+	 * 
+	 * @param window
+	 */
 	private void openCodeGen(IWorkbenchWindow window) {
 
 		log.info("Trying to open CodeGen wizard.");
@@ -92,7 +98,7 @@ public class CodeGenHandler extends AbstractHandler {
 					MethodsPage meth = ((MethodsPage) current);
 					PreviewPage prev = ((PreviewPage) target);
 					log.info("Trying to generate code.");
-					Generator g = new Generator(meth.getClassBuilder().getClassName(),
+					CodeGenerator g = new CodeGenerator(meth.getClassBuilder().getClassName(),
 							meth.getClassBuilder().getPackageName(), meth.getSelectedOptional());
 					log.info("Trying to update text area in 'PreviewPage'.");
 					prev.updateAreaContent(g.generateCode());

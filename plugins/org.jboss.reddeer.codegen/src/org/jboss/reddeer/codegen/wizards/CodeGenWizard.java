@@ -30,6 +30,7 @@ import org.jboss.reddeer.common.logging.Logger;
 import org.jboss.reddeer.common.util.Display;
 
 /**
+ * Parent RedDeer CodeGen wizard class
  * 
  * @author djelinek
  */
@@ -37,7 +38,7 @@ import org.jboss.reddeer.common.util.Display;
 public class CodeGenWizard extends NewElementWizard implements INewWizard {
 
 	private final Logger log = Logger.getLogger(CodeGenWizard.class);
-	
+
 	private static final String JAVA_SUFFIX = ".java";
 
 	private FirstPage firstPage;
@@ -46,7 +47,7 @@ public class CodeGenWizard extends NewElementWizard implements INewWizard {
 	private ISelection selection;
 	private ClassBuilder classBuilder;
 	private boolean ans = false;
-	
+
 	/**
 	 * Constructor for CodeGenWizard.
 	 */
@@ -58,15 +59,13 @@ public class CodeGenWizard extends NewElementWizard implements INewWizard {
 	}
 
 	/**
-	 * Adding the page to the wizard.
+	 * Adding the pages to the wizard.
 	 */
 	public void addPages() {
 		methodsPage = new MethodsPage(selection, classBuilder);
 		firstPage = new FirstPage(selection, methodsPage);
 		previewPage = new PreviewPage(selection);
-		
 		firstPage.init(getSelection());
-		
 		addPage(firstPage);
 		addPage(methodsPage);
 		addPage(previewPage);
@@ -86,13 +85,11 @@ public class CodeGenWizard extends NewElementWizard implements INewWizard {
 	 */
 	@Override
 	public boolean performFinish() {
-
 		log.info("Trying finish after pressing 'Finish button'.");
 		String srcText = firstPage.getPackageFragmentRootText();
 		String packageName = firstPage.getPackageText();
 		String fileName = firstPage.getTypeName();
 		InputStream stream = new ByteArrayInputStream(previewPage.getAreaTXT().getBytes());
-
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			public void run(IProgressMonitor monitor) throws InvocationTargetException {
 				try {
@@ -179,6 +176,13 @@ public class CodeGenWizard extends NewElementWizard implements INewWizard {
 		throw new CoreException(status);
 	}
 
+	/**
+	 * Return class name with .java suffix
+	 * 
+	 * @param name
+	 *            ClassName
+	 * @return String
+	 */
 	private String getFileName(String name) {
 		try {
 			if (name.substring(name.lastIndexOf("."), name.length()).equals(JAVA_SUFFIX))
@@ -192,7 +196,7 @@ public class CodeGenWizard extends NewElementWizard implements INewWizard {
 
 	@Override
 	protected void finishPage(IProgressMonitor monitor) throws InterruptedException, CoreException {
-		firstPage.createType(monitor); // use the full progress monitor		
+		firstPage.createType(monitor); // use the full progress monitor
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import org.jboss.reddeer.swt.generator.framework.rules.RedDeerUtils;
 import org.jboss.reddeer.swt.generator.framework.rules.simple.ButtonRule;
 
 /**
+ * RedDeer CodeGen rules for Button widget/control.
  * 
  * @author djelinek
  */
@@ -27,6 +28,13 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		return super.appliesTo(event);
 	}
 
+	/**
+	 * Create contructor method
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return MethodBuilder instance
+	 */
 	@Override
 	public MethodBuilder constructor(Control control) {
 		String label = getText();
@@ -39,12 +47,17 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		String ref = RedDeerUtils.getReferencedCompositeString(getComposites());
 		if (!ref.isEmpty())
 			suffix = suffix + "group";
-
 		return MethodBuilder.method().returnType(type).get(label + suffix)
-				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")")
-				.type(MethodsPage.GETTER);
+				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")").type(MethodsPage.GETTER);
 	}
 
+	/**
+	 * Create action method – click, toogle, etc.
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return MethodBuilder instance
+	 */
 	public MethodBuilder action(Control control) {
 		String label = getText();
 		if (label == null || label.isEmpty()) {
@@ -57,7 +70,6 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		String ref = RedDeerUtils.getReferencedCompositeString(getComposites());
 		if (!ref.isEmpty())
 			suffix = "Group";
-
 		if (actionText.equals(".toggle"))
 			return MethodBuilder.method().name(actionText + " " + WidgetUtils.cleanText(label) + suffix)
 					.parameter("boolean choice").command(comm).type(MethodsPage.ACTION);
@@ -66,6 +78,14 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 					.type(MethodsPage.ACTION);
 	}
 
+	/**
+	 * Create getter method
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return MethodBuilder instance
+	 */
+	@Override
 	public MethodBuilder get(Control control) {
 		String label = getText();
 		if (label == null || label.isEmpty()) {
@@ -77,6 +97,13 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 				.type(MethodsPage.GETTER);
 	}
 
+	/**
+	 * Returns lit of available/created methods
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return List<MethodBuilder>
+	 */
 	@Override
 	public List<MethodBuilder> getActionMethods(Control control) {
 		List<MethodBuilder> forReturn = new ArrayList<>();
@@ -86,6 +113,11 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		return forReturn;
 	}
 
+	/**
+	 * Return button type and set right button suffix
+	 * 
+	 * @return String
+	 */
 	public String getType() {
 		String type = null;
 		int style = getStyle();
@@ -111,6 +143,13 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		return type;
 	}
 
+	/**
+	 * Return right action command for different button types
+	 * 
+	 * @param type
+	 *            Button type (Radio, Push, Check, etc.)
+	 * @return String
+	 */
 	public String getCommand(String type) {
 		StringBuilder builder = new StringBuilder("new " + getType() + "(");
 		builder.append(RedDeerUtils.getReferencedCompositeString(getComposites()));

@@ -21,17 +21,27 @@ import org.jboss.reddeer.codegen.wizards.MethodsPage;
 import org.jboss.reddeer.core.lookup.ShellLookup;
 
 /**
+ * Class for generating source code for all supported widget rules. This class
+ * is also looking for parent control.
  * 
  * @author djelinek
  */
 @SuppressWarnings("restriction")
-public class Generator {
+public class CodeGenerator {
 
 	private ControlFinder controlFinder;
 	private ClassBuilder classBuilder;
 	private List<String> options;
 
-	public Generator(String className, String packageName, List<String> optional) {
+	/**
+	 * Default Code Generator constructor
+	 * 
+	 * @param className
+	 * @param packageName
+	 * @param optional
+	 *            list of checked optional properties from second wizard page
+	 */
+	public CodeGenerator(String className, String packageName, List<String> optional) {
 		controlFinder = new ControlFinder();
 		classBuilder = new ClassBuilder();
 		this.classBuilder.setClassName(className);
@@ -39,11 +49,22 @@ public class Generator {
 		this.options = optional;
 	}
 
+	/**
+	 * This method is looking for first shell under Code Generator wizard
+	 * 
+	 * @return shell control
+	 */
 	public Control getShellControl() {
 		Shell[] sh = ShellLookup.getInstance().getShells();
 		return sh[sh.length - 2];
 	}
 
+	/**
+	 * This method is looking for parent Control of first wizard under Code
+	 * Generator wizard
+	 * 
+	 * @return parent wizard Control
+	 */
 	public Control getControl() {
 		Shell[] sh = ShellLookup.getInstance().getShells();
 		Control[] c = sh[sh.length - 2].getChildren();
@@ -71,6 +92,11 @@ public class Generator {
 		}
 	}
 
+	/**
+	 * Generates code (methods, imports, etc.) for all supported widgets at found Control.
+	 * 
+	 * @return ClassBuilder instance
+	 */
 	public ClassBuilder generateCode() {
 		classBuilder.addOptionals(options);
 		classBuilder.clearImports();

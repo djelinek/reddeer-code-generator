@@ -16,6 +16,7 @@ import org.jboss.reddeer.codegen.Activator;
 import org.jboss.reddeer.codegen.builder.ClassBuilder;
 
 /**
+ * This class represents last RedDeer CodeGen wizard page – source code preview
  * 
  * @author djelinek
  */
@@ -48,28 +49,61 @@ public class PreviewPage extends NewTypeWizardPage {
 		Dialog.applyDialogFont(composite);
 	}
 
+	/**
+	 * Do refresh of text field area at preview page
+	 * 
+	 * @param builder
+	 *            ClassBuilder
+	 */
 	public void updateAreaContent(ClassBuilder builder) {
 		if (!area.getText().isEmpty())
 			area.cut();
 		area.setText(builder.toString());
 	}
 
+	/**
+	 * Set new text field area content
+	 * 
+	 * @param str
+	 *            String
+	 */
 	public void setAreaTXT(String str) {
 		area.setText(str);
 	}
 
+	/**
+	 * Return text field area content
+	 * 
+	 * @return String
+	 */
 	public String getAreaTXT() {
 		return area.getText();
 	}
 
+	/**
+	 * Return text field area instance
+	 * 
+	 * @return StyledText
+	 */
 	public StyledText getArea() {
 		return area;
 	}
 
+	/**
+	 * Return class builder instance of preview page
+	 * 
+	 * @return ClassBuilder
+	 */
 	public ClassBuilder getPreviewClassBuilder() {
 		return this.classBuilder;
 	}
 
+	/**
+	 * Set new content of preview page class builder instance
+	 * 
+	 * @param classBuilder
+	 *            ClassBuilder
+	 */
 	public void setClassBuilder(ClassBuilder classBuilder) {
 		this.classBuilder = classBuilder;
 	}

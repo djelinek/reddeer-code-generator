@@ -8,7 +8,7 @@
 
 	<parent>
 		<groupId>reddeer.codegen</groupId>
-        <artifactId>plugins</artifactId>
+		<artifactId>plugins</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 </project>

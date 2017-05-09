@@ -21,6 +21,8 @@ import org.jboss.reddeer.codegen.Activator;
 import org.jboss.reddeer.codegen.builder.ClassBuilder;
 
 /**
+ * This class represents second RedDeer CodeGen wizard page – methods
+ * specifications
  * 
  * @author djelinek
  */
@@ -114,6 +116,11 @@ public class MethodsPage extends NewTypeWizardPage {
 		LayoutUtil.setHorizontalSpan(fMethodOptionalStubsButtons.getSelectionButtonsGroup(composite), nColumns - 1);
 	}
 
+	/**
+	 * Return list of selected method optional
+	 * 
+	 * @return List<String>
+	 */
 	public List<String> getSelectedOptional() {
 		return selectedOptional;
 	}
