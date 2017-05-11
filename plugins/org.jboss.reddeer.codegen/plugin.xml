@@ -7,13 +7,13 @@
       <category
             id="org.jboss.reddeer.codegen"
             name="RedDeer CodeGen"
-            parentCategory="org.jboss.reddeer.tools">
+            parentCategory="org.eclipse.reddeer.tools">
       </category>
       <wizard
             category="org.jboss.reddeer.codegen"
-            class="org.jboss.reddeer.codegen.wizards.CodeGenWizard"
+            class="reddeer.codegen.wizards.CodeGenWizard"
             icon="icons/reddeer_icon.png"
-            id="org.jboss.reddeer.codegen.wizards.CodeGenWizard"
+            id="reddeer.codegen.wizards.CodeGenWizard"
             name="CodeGen">
       </wizard>
    </extension>
@@ -49,7 +49,7 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="org.jboss.reddeer.codegen.handlers.CodeGenHandler"
+            class="reddeer.codegen.handlers.CodeGenHandler"
             commandId="org.jboss.reddeer.codegen.commands.codeGenCommand">
       </handler>
    </extension>

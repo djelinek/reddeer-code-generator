@@ -13,11 +13,6 @@
 	</parent>
 
 	<properties>
-		<!-- Mars convention -->
-		<publishingPath>mars/snapshots/builds/${JOB_NAME}/${BUILD_ID}-B${BUILD_NUMBER}/all/repo/</publishingPath>
-		<!-- Luna convention: TODO JBIDE-18772: remove this when master build only
-			works for Mars -->
-		<publishingPath>builds/staging/${JOB_NAME}/all/repo/</publishingPath>
 		<update.site.name>Red Deer CodeGen</update.site.name>
 	</properties>
 
@@ -107,9 +102,6 @@
 						<!-- SWTBot bundles -->
 						<iu>
 							<id>org.eclipse.swtbot.generator.feature.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.swtbot.generator.feature.source.feature.group</id>
 						</iu>
 					</ius>
 					<!-- The destination directory to mirror to. -->
