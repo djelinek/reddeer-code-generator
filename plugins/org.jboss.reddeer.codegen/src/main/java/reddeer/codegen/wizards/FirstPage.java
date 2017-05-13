@@ -41,7 +41,7 @@ public class FirstPage extends NewTypeWizardPage {
 	public FirstPage(ISelection selection, MethodsPage methodsPage) {
 		super(true, PAGE_NAME);
 		this.setTitle("Class definition");
-		this.setDescription("This wizard allows generate a new CodeGen class with *.java");
+		this.setDescription("This wizard allows generate a new CodeGen class.");
 		this.setImageDescriptor(ImageDescriptor.createFromURL(
 				FileLocator.find(Platform.getBundle(Activator.PLUGIN_ID), new Path("icons/reddeer_logo.png"), null)));
 		this.selection = selection;

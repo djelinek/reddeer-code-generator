@@ -19,6 +19,8 @@ import org.eclipse.reddeer.swt.generator.framework.rules.simple.ShellRule;
  */
 public class ShellCodeGenRule extends ShellRule implements CodeGen {
 
+	private String suffix = "SHL";
+
 	@Override
 	public boolean appliesTo(Event event) {
 		return event.widget instanceof Shell;
@@ -35,7 +37,7 @@ public class ShellCodeGenRule extends ShellRule implements CodeGen {
 	public MethodBuilder constructor(Control control) {
 		String title = "\"" + getShellTitle() + "\"";
 		return MethodBuilder.method().returnType("DefaultShell").get("Shell" + WidgetUtils.cleanText(title))
-				.returnCommand("new DefaultShell(" + title + ")").type(MethodsPage.GETTER);
+				.returnCommand("new DefaultShell(" + title + ")").type(MethodsPage.GETTER).rule(suffix);
 	}
 
 	/**
@@ -49,7 +51,7 @@ public class ShellCodeGenRule extends ShellRule implements CodeGen {
 	public MethodBuilder get(Control control) {
 		String title = "\"" + getShellTitle() + "\"";
 		return MethodBuilder.method().returnType("String").get("Text " + title)
-				.returnCommand("new DefaultShell(" + title + ").getText()").type(MethodsPage.GETTER);
+				.returnCommand("new DefaultShell(" + title + ").getText()").type(MethodsPage.GETTER).rule(suffix);
 	}
 
 	/**

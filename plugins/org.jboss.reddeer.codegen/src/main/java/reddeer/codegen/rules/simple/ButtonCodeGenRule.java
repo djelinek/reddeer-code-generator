@@ -48,7 +48,8 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		if (!ref.isEmpty())
 			suffix = suffix + "group";
 		return MethodBuilder.method().returnType(type).get(label + suffix)
-				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")").type(MethodsPage.GETTER);
+				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")").type(MethodsPage.GETTER)
+				.rule(suffix);
 	}
 
 	/**
@@ -75,7 +76,49 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 					.parameter("boolean choice").command(comm).type(MethodsPage.ACTION);
 		else
 			return MethodBuilder.method().name(actionText + " " + WidgetUtils.cleanText(label) + suffix).command(comm)
-					.type(MethodsPage.ACTION);
+					.type(MethodsPage.ACTION).rule(suffix);
+	}
+
+	/**
+	 * Create isChecked method - CheckBox
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return MethodBuilder instance
+	 */
+	public MethodBuilder isChecked(Control control) {
+		String label = getText();
+		if (label == null || label.isEmpty()) {
+			label = String.valueOf(getIndex());
+		} else {
+			label = "\"" + label + "\"";
+		}
+		String ref = RedDeerUtils.getReferencedCompositeString(getComposites());
+		if (!ref.isEmpty())
+			suffix = "Group";
+		return MethodBuilder.method().returnType("boolean").name("isChecked " + WidgetUtils.cleanText(label) + suffix)
+				.returnCommand(getCommand("check")).type(MethodsPage.ACTION).rule(suffix);
+	}
+
+	/**
+	 * Create isSelected method - RadioButton
+	 * 
+	 * @param control
+	 *            SWT widget
+	 * @return MethodBuilder instance
+	 */
+	public MethodBuilder isSelected(Control control) {
+		String label = getText();
+		if (label == null || label.isEmpty()) {
+			label = String.valueOf(getIndex());
+		} else {
+			label = "\"" + label + "\"";
+		}
+		String ref = RedDeerUtils.getReferencedCompositeString(getComposites());
+		if (!ref.isEmpty())
+			suffix = "Group";
+		return MethodBuilder.method().returnType("boolean").name("isSelected " + WidgetUtils.cleanText(label) + suffix)
+				.returnCommand(getCommand("select")).type(MethodsPage.ACTION).rule(suffix);
 	}
 
 	/**
@@ -94,7 +137,7 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 			label = "\"" + label + "\"";
 		}
 		return MethodBuilder.method().returnType("String").get("Text " + label).returnCommand(getCommand("get"))
-				.type(MethodsPage.GETTER);
+				.type(MethodsPage.GETTER).rule(suffix);
 	}
 
 	/**
@@ -110,6 +153,16 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 		forReturn.add(constructor(control));
 		forReturn.add(get(control));
 		forReturn.add(action(control));
+		switch (getType()) {
+		case "CheckBox":
+			forReturn.add(isChecked(control));
+			break;
+		case "RadioButton":
+			forReturn.add(isSelected(control));
+			break;
+		default:
+			break;
+		}
 		return forReturn;
 	}
 
@@ -161,14 +214,18 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 			builder.append("\"" + WidgetUtils.cleanText(text) + "\"");
 		}
 		builder.append(")");
-		if (type.equals("btn"))
+		if (type.equals("btn")) {
 			if ((getStyle() & SWT.CHECK) != 0 || (getStyle() & SWT.RADIO) != 0) {
 				builder.append(".toggle(choice)");
 			} else {
 				builder.append(".click()");
 			}
-		else if (type.equals("get")) {
+		} else if (type.equals("get")) {
 			builder.append(".getText()");
+		} else if (type.equals("check")) {
+			builder.append(".isChecked()");
+		} else if (type.equals("select")) {
+			builder.append(".isSelected()");
 		}
 		return builder.toString();
 	}

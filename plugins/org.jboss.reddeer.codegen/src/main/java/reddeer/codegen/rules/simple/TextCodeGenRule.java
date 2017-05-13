@@ -58,7 +58,8 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 		}
 		String ref = RedDeerUtils.getReferencedCompositeString(RedDeerUtils.getComposites(control));
 		return MethodBuilder.method().returnType(type).get(label + suffix)
-				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")").type(MethodsPage.GETTER);
+				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")").type(MethodsPage.GETTER)
+				.rule(suffix);
 	}
 
 	/**
@@ -76,7 +77,7 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 			label = "\"" + label + "\"";
 		}
 		return MethodBuilder.method().name("setText " + label).parameter("String str").command(getCommand("set"))
-				.type(MethodsPage.SETTER);
+				.type(MethodsPage.SETTER).rule(suffix);
 	}
 
 	/**
@@ -95,7 +96,7 @@ public class TextCodeGenRule extends TextRule implements CodeGen {
 			label = "\"" + label + "\"";
 		}
 		return MethodBuilder.method().returnType("String").get("Text " + label).returnCommand(getCommand("get"))
-				.type(MethodsPage.GETTER);
+				.type(MethodsPage.GETTER).rule(suffix);
 	}
 
 	/**

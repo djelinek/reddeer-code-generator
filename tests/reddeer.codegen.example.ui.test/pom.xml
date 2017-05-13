@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>reddeer.codegen</groupId>
+		<artifactId>tests</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>example</groupId>
+	<artifactId>reddeer.codegen.example.ui.test</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Example UI test</name>
+	<description>Example UI test plug-in</description>
+	<packaging>eclipse-test-plugin</packaging>
+
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
+	<properties>
+		<java-version>1.7</java-version>
+		<maven-version>3.0</maven-version>
+		<tycho-version>0.22.0</tycho-version>
+		<tycho-test-jvmArgs>-Xmx512m -Xms40m</tycho-test-jvmArgs>
+		<platformSystemProperties></platformSystemProperties>
+		<surefire-timeout>1200</surefire-timeout>
+		<eclipse-target-site>http://download.eclipse.org/releases/neon</eclipse-target-site>
+		<swtbot-update-site>http://download.eclipse.org/technology/swtbot/releases/2.2.1</swtbot-update-site>
+		<eclipse-orbit-update-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20150821153341/repository/</eclipse-orbit-update-site>
+		<reddeer-update-site>http://download.jboss.org/jbosstools/neon/snapshots/builds/reddeer_master/</reddeer-update-site>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>eclipse-target-site</id>
+			<url>${eclipse-target-site}</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>swtbot-update-site</id>
+			<url>${swtbot-update-site}</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>reddeer-update-site</id>
+			<url>${reddeer-update-site}</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>eclipse-orbit-update-site</id>
+			<url>${eclipse-orbit-update-site}</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>sonatype-public</id>
+			<url>http://repository.sonatype.org/content/groups/sonatype-public-grid</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<resolver>p2</resolver>
+					<pomDependencies>consider</pomDependencies>
+					<ignoreTychoRepositories>true</ignoreTychoRepositories>
+				</configuration>
+			</plugin>
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-packaging-plugin</artifactId>
+					<version>${tycho-version}</version>
+					<configuration>
+						<format>yyyyMMdd-HHmm</format>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-surefire-plugin</artifactId>
+					<version>${tycho-version}</version>
+					<configuration>
+						<useUIHarness>true</useUIHarness>
+						<useUIThread>false</useUIThread>
+						<testSuite>reddeer.codegen.example.ui.test</testSuite>
+						<testClass>org.eclipse.reddeer.codegen.example.AllRedDeerTests</testClass>
+						<!-- <testClass>**/*Test</testClass> -->
+						<!-- THE FOLLOWING LINE MUST NOT BE BROKEN BY AUTOFORMATTING -->
+						<argLine>${tycho-test-jvmArgs} ${platformSystemProperties}</argLine>
+						<includes>
+							<include>**/AllTests.class</include>
+							<include>**/*AllTests*.class</include>
+							<include>**/*AllBotTests*.class</include>
+							<include>**/*AllRedDeerTests*.class</include>
+							<include>**/*TestSuite*.class</include>
+						</includes>
+
+						<dependencies combine.children="append">
+							<!-- This entry should enable creating of default JDK on Mac -->
+							<dependency>
+								<type>p2-installable-unit</type>
+								<artifactId>org.eclipse.jdt.feature.group</artifactId>
+								<version>0.0.0</version>
+							</dependency>
+							<!-- This entries should install all RedDeer features -->
+							<dependency>
+								<type>p2-installable-unit</type>
+								<artifactId>org.eclipse.reddeer.eclipse.feature.feature.group</artifactId>
+								<version>0.0.0</version>
+							</dependency>
+							<dependency>
+								<type>p2-installable-unit</type>
+								<artifactId>org.eclipse.reddeer.gef.spy.feature.feature.group</artifactId>
+								<version>0.0.0</version>
+							</dependency>
+							<dependency>
+								<type>p2-installable-unit</type>
+								<artifactId>org.eclipse.reddeer.graphiti.feature.feature.group</artifactId>
+								<version>0.0.0</version>
+							</dependency>
+							<dependency>
+								<type>p2-installable-unit</type>
+								<artifactId>org.eclipse.reddeer.junit.extension.feature.feature.group</artifactId>
+								<version>0.0.0</version>
+							</dependency>
+							<dependency>
+								<type>p2-installable-unit</type>
+								<artifactId>org.eclipse.reddeer.logparser.feature.feature.group</artifactId>
+								<version>0.0.0</version>
+							</dependency>
+							<dependency>
+								<type>p2-installable-unit</type>
+								<artifactId>org.eclipse.reddeer.recorder.feature.feature.group</artifactId>
+								<version>0.0.0</version>
+							</dependency>
+							<dependency>
+								<type>p2-installable-unit</type>
+								<artifactId>org.eclipse.reddeer.spy.feature.feature.group</artifactId>
+								<version>0.0.0</version>
+							</dependency>
+							<dependency>
+								<type>p2-installable-unit</type>
+								<artifactId>org.eclipse.reddeer.swt.feature.feature.group</artifactId>
+								<version>0.0.0</version>
+							</dependency>
+							<dependency>
+								<type>p2-installable-unit</type>
+								<artifactId>org.eclipse.reddeer.ui.feature.feature.group</artifactId>
+								<version>0.0.0</version>
+							</dependency>
+							<dependency>
+								<type>p2-installable-unit</type>
+								<artifactId>org.eclipse.swtbot.generator.feature.feature.group</artifactId>
+								<version>0.0.0</version>
+							</dependency>
+						</dependencies>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.3</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<profiles>
+		<profile>
+			<!-- Workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=388084 -->
+			<id>osx</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<properties>
+				<!-- THE FOLLOWING LINE MUST NOT BE BROKEN BY AUTOFORMATTING -->
+				<platformSystemProperties> -XstartOnFirstThread </platformSystemProperties>
+			</properties>
+		</profile>
+	</profiles>
+</project>

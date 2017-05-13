@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>reddeer.codegen</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>reddeer.codegen</groupId>
+	<artifactId>tests</artifactId>
+	<name>RedDeer CodeGen Tests</name>
+	<packaging>pom</packaging>
+	<properties>
+		<surefire.timeout>10800</surefire.timeout>
+		<memoryOptions2>-XX:MaxPermSize=384m</memoryOptions2>
+		<swt.bot.test.record.screencast>false</swt.bot.test.record.screencast>
+		<pauseFailedTest>false</pauseFailedTest>
+		<reddeer.skipUnfixedIssues>false</reddeer.skipUnfixedIssues>
+		<integrationTestsSystemProperties>-Dswt.bot.test.record.screencast=${swt.bot.test.record.screencast} -Dorg.eclipse.swtbot.screenshots.dir=${project.build.directory}/screenshots -DpauseFailedTest=${pauseFailedTest} -Dorg.jboss.tools.central.donotshow=true -Dreddeer.skipUnfixedIssues=${reddeer.skipUnfixedIssues} -Dorg.eclipse.swt.internal.gtk.disablePrinting</integrationTestsSystemProperties>
+		<killServers>false</killServers>
+		<test.installPath.OSX/>
+	</properties>
+	<modules>
+		<module>reddeer.codegen.example.ui.test</module>
+	</modules>
+</project>

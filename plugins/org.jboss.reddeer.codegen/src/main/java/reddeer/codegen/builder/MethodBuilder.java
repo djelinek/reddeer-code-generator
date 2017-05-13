@@ -15,6 +15,7 @@ public class MethodBuilder implements Comparable<MethodBuilder> {
 	private String visibility;
 	private String returnType;
 	private String type;
+	private String rule;
 	private List<String> parameters;
 	private List<String> commands;
 
@@ -35,6 +36,8 @@ public class MethodBuilder implements Comparable<MethodBuilder> {
 		visibility = "public";
 		returnType = "void";
 		name = "foo";
+		rule = "";
+		type = "";
 		parameters = new ArrayList<String>();
 		commands = new ArrayList<String>();
 	}
@@ -81,6 +84,27 @@ public class MethodBuilder implements Comparable<MethodBuilder> {
 	public MethodBuilder returnType(String type) {
 		this.returnType = type;
 		return this;
+	}
+
+	/**
+	 * Sets used rule suffix
+	 * 
+	 * @param rule
+	 *            rule
+	 * @return current code builder
+	 */
+	public MethodBuilder rule(String rule) {
+		this.rule = rule;
+		return this;
+	}
+
+	/**
+	 * Get method rule (suffix)
+	 * 
+	 * @return String
+	 */
+	public String getRule() {
+		return this.rule;
 	}
 
 	/**

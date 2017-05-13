@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.swt.SWT;
+
 import reddeer.codegen.wizards.MethodsPage;
 
 /**
@@ -20,7 +22,7 @@ public class ClassBuilder {
 	private StringBuffer classBuilder;
 	private String packageName;
 	private List<String> imports;
-	private List<String> selectedOptionals;
+	private List<String> selectedOptions;
 	private List<MethodBuilder> methods;
 	private Map<String, String> constants;
 	private String extendedClass;
@@ -30,14 +32,16 @@ public class ClassBuilder {
 	private static final String TAB = "\t";
 	private static final String NEW_LINE = "\n";
 	private static final String D_NEW_LINE = "\n\n";
+	private static final String JAVA_QUALIFIER = ".java";
 
 	public ClassBuilder(String name, String projectPackage) {
 		this.className = getClassName(name);
 		this.visibility = "public";
 		this.packageName = projectPackage;
+		this.extendedClass = "";
 		methods = new ArrayList<>();
 		imports = new ArrayList<>();
-		selectedOptionals = new ArrayList<>();
+		selectedOptions = new ArrayList<>();
 		constants = new TreeMap<>();
 		classBuilder = new StringBuffer();
 	}
@@ -47,8 +51,9 @@ public class ClassBuilder {
 		this.visibility = "public";
 		this.packageName = projectPackage;
 		this.methods = methods;
+		this.extendedClass = "";
 		imports = new ArrayList<>();
-		selectedOptionals = new ArrayList<>();
+		selectedOptions = new ArrayList<>();
 		constants = new TreeMap<>();
 		classBuilder = new StringBuffer();
 	}
@@ -65,9 +70,10 @@ public class ClassBuilder {
 		this.className = "CodeGenDefault";
 		this.visibility = "public";
 		this.packageName = "org";
+		this.extendedClass = "";
 		methods = new ArrayList<>();
 		imports = new ArrayList<>();
-		selectedOptionals = new ArrayList<>();
+		selectedOptions = new ArrayList<>();
 		constants = new TreeMap<>();
 		classBuilder = new StringBuffer();
 	}
@@ -166,13 +172,55 @@ public class ClassBuilder {
 	}
 
 	/**
+	 * Delete specific import
+	 * 
+	 * @param importt
+	 *            String
+	 */
+	public void removeImport(String importt) {
+		if (imports.contains(importt))
+			imports.remove(importt);
+	}
+
+	/**
+	 * Delete specific import
+	 * 
+	 * @param type
+	 *            SWT
+	 */
+	public void removeImport(int type) {
+		String importt = "";
+		switch (type) {
+		case SWT.PUSH:
+			importt = "org.eclipse.reddeer.swt.impl.button.PushButton";
+			break;
+		case SWT.CHECK:
+			importt = "org.eclipse.reddeer.swt.impl.button.CheckBox";
+			break;
+		case SWT.ARROW:
+			importt = "org.eclipse.reddeer.swt.impl.button.ArrowButton";
+			break;
+		case SWT.RADIO:
+			importt = "org.eclipse.reddeer.swt.impl.button.RadioButton";
+			break;
+		case SWT.TOGGLE:
+			importt = "org.eclipse.reddeer.swt.impl.button.ToggleButton";
+			break;
+		default:
+			break;
+		}
+		if (imports.contains(importt))
+			imports.remove(importt);
+	}
+
+	/**
 	 * Add new selected additional property to optional properties list
 	 * 
-	 * @param optionals
+	 * @param options
 	 *            List of selected optional properties
 	 */
-	public void addOptionals(List<String> optionals) {
-		this.selectedOptionals = optionals;
+	public void addOptions(List<String> options) {
+		this.selectedOptions = options;
 	}
 
 	/**
@@ -238,8 +286,6 @@ public class ClassBuilder {
 		classBuilder = new StringBuffer(iniComment());
 		// Add all packages into class
 		classBuilder.append("package").append(SPACE).append(packageName).append(SEMICOLON).append(D_NEW_LINE);
-		// is extendible for extending WizardDialog ?
-		boolean extendible = isExtendible();
 		// Add all imports into class
 		for (String projectImport : imports) {
 			classBuilder.append("import").append(SPACE).append(projectImport).append(SEMICOLON).append(NEW_LINE);
@@ -247,12 +293,16 @@ public class ClassBuilder {
 		if (!imports.isEmpty())
 			classBuilder.append(NEW_LINE);
 		// create head of class
-		if (extendible && selectedOptionals.contains(MethodsPage.INHERITING))
+		if (selectedOptions.contains(MethodsPage.INHERITING) && selectedOptions.contains(MethodsPage.INCLUDE_ALL)) {
+			// remove methods which will be inherit and use appropriate
+			// "extends" class header
+			removeInheriteMethods();
 			classBuilder.append(visibility).append(SPACE).append("class").append(SPACE).append(getClassName(className))
 					.append(SPACE).append("extends").append(SPACE).append(extendedClass).append(SPACE).append("{");
-		else
+		} else {
 			classBuilder.append(visibility).append(SPACE).append("class").append(SPACE).append(getClassName(className))
 					.append(SPACE).append("{");
+		}
 		// class constants
 		if (!constants.isEmpty()) {
 			for (String constant : constants.keySet()) {
@@ -262,7 +312,8 @@ public class ClassBuilder {
 		}
 		// class methods
 		Collections.sort(methods);
-		classBuilder.append(D_NEW_LINE).append(TAB).append("// Generated class methods").append(D_NEW_LINE);
+		classBuilder.append(D_NEW_LINE).append(TAB).append("// Generated class methods ").append("(")
+				.append(methods.size()).append(")").append(NEW_LINE);
 		for (MethodBuilder method : methods) {
 			classBuilder.append(method.toString()).append(D_NEW_LINE);
 		}
@@ -272,26 +323,46 @@ public class ClassBuilder {
 	}
 
 	/**
-	 * Validate if class could be extended od not
+	 * Validate if class could inherit or not
 	 * 
 	 * @return true/false
 	 */
 	public boolean isExtendible() {
 		boolean extendible = false;
+		for (MethodBuilder meth : this.methods) {
+			if (meth.getName().contains("Finish") || meth.getName().contains("Cancel")
+					|| meth.getName().contains("Next") || meth.getName().contains("Back")) {
+				extendible = true;
+			}
+		}
+		return extendible;
+	}
+
+	/**
+	 * Remove methods which will be inherit
+	 */
+	public void removeInheriteMethods() {
 		List<MethodBuilder> toRemove = new ArrayList<>();
 		for (MethodBuilder meth : this.methods) {
 			if (meth.getName().contains("Finish") || meth.getName().contains("Cancel")
 					|| meth.getName().contains("Next") || meth.getName().contains("Back")) {
 				toRemove.add(meth);
-				extendible = true;
 			}
 		}
-		if (extendible && selectedOptionals.contains(MethodsPage.INHERITING)) {
+		if (isExtendible() && selectedOptions.contains(MethodsPage.INHERITING)
+				&& selectedOptions.contains(MethodsPage.INCLUDE_ALL)) {
 			for (MethodBuilder rm : toRemove) {
 				methods.remove(rm);
 			}
+			int i = 0;
+			for (MethodBuilder meth : this.methods) {
+				if (meth.getRule().equals("BTN"))
+					i++;
+			}
+			if (i == 0) {
+				removeImport(SWT.PUSH);
+			}
 		}
-		return extendible;
 	}
 
 	/**
@@ -303,8 +374,8 @@ public class ClassBuilder {
 		StringBuffer sb = new StringBuffer();
 		sb.append("/** \n" + " * This class '" + getFileName(className)
 				+ "' was generated by RedDeer Code Generator. \n");
-		sb.append(" * Selected optional:");
-		for (String optional : selectedOptionals) {
+		sb.append(" * Selected options:");
+		for (String optional : selectedOptions) {
 			sb.append("\n *").append(TAB).append(TAB).append(optional);
 		}
 		sb.append("\n */ \n");
@@ -319,7 +390,7 @@ public class ClassBuilder {
 	 */
 	private String getClassName(String name) {
 		try {
-			if (name.substring(name.lastIndexOf("."), name.length()).equals(".java"))
+			if (name.substring(name.lastIndexOf("."), name.length()).equals(JAVA_QUALIFIER))
 				return name.substring(0, name.lastIndexOf("."));
 			else
 				return name;
@@ -336,12 +407,12 @@ public class ClassBuilder {
 	 */
 	private String getFileName(String name) {
 		try {
-			if (name.substring(name.lastIndexOf("."), name.length()).equals(".java"))
+			if (name.substring(name.lastIndexOf("."), name.length()).equals(JAVA_QUALIFIER))
 				return name;
 			else
-				return name + ".java";
+				return name + JAVA_QUALIFIER;
 		} catch (Exception e) {
-			return name + ".java";
+			return name + JAVA_QUALIFIER;
 		}
 	}
 

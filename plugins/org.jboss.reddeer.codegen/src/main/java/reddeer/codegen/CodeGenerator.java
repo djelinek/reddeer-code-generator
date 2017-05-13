@@ -33,6 +33,11 @@ public class CodeGenerator {
 	private ClassBuilder classBuilder;
 	private List<String> options;
 
+	public static final String WIZARD_DIALOG = "WizardDialog";
+	public static final String WIZARD_DIALOG_IMPORT = "org.eclipse.reddeer.jface.wizard.WizardDialog";
+	public static final String PREFERENCE_DIALOG = "PreferenceDialog";
+	public static final String PREFERENCE_DIALOG_IMPORT = "org.eclipse.reddeer.jface.wizard.PreferenceDialog";
+
 	/**
 	 * Default Code Generator constructor
 	 * 
@@ -71,22 +76,18 @@ public class CodeGenerator {
 		Object o = sh[sh.length - 2].getData();
 		if (!options.contains(MethodsPage.INCLUDE_ALL) && !options.contains(MethodsPage.INHERITING)) {
 			if (o instanceof WizardDialog) {
-				// classBuilder.addImport("org.jboss.reddeer.jface.wizard.WizardDialog");
-				// classBuilder.setExtendedClass("WizardDialog");
 				return ((WizardDialog) o).getCurrentPage().getControl();
 			} else if (o instanceof WorkbenchPreferenceDialog) {
-				// classBuilder.addImport("org.jboss.reddeer.jface.wizard.PreferenceDialog");
-				// classBuilder.setExtendedClass("PreferenceDialog");
 				return ((WorkbenchPreferenceDialog) o).getCurrentPage().getControl();
 			} else
 				return c[0];
 		} else {
-			if (o instanceof WizardDialog) {
-				classBuilder.addImport("org.eclipse.reddeer.jface.wizard.WizardDialog");
-				classBuilder.setExtendedClass("WizardDialog");
-			} else if (o instanceof WorkbenchPreferenceDialog) {
-				classBuilder.addImport("org.eclipse.reddeer.jface.wizard.PreferenceDialog");
-				classBuilder.setExtendedClass("PreferenceDialog");
+			if (options.contains(MethodsPage.INHERITING)) {
+				if (o instanceof WizardDialog) {
+					classBuilder.setExtendedClass(WIZARD_DIALOG);
+				} else if (o instanceof WorkbenchPreferenceDialog) {
+					classBuilder.setExtendedClass(PREFERENCE_DIALOG);
+				}
 			}
 			return c[0];
 		}
@@ -99,7 +100,7 @@ public class CodeGenerator {
 	 * @return ClassBuilder instance
 	 */
 	public ClassBuilder generateCode() {
-		classBuilder.addOptionals(options);
+		classBuilder.addOptions(options);
 		classBuilder.clearImports();
 		List<Control> controls = controlFinder.find(getControl(), new IsInstanceOf(Control.class));
 		controls.add(getShellControl());
@@ -143,9 +144,11 @@ public class CodeGenerator {
 						}
 					}
 				}
-
 			}
-
+			if (classBuilder.getExtendedClass().equals(WIZARD_DIALOG) && classBuilder.isExtendible())
+				classBuilder.addImport(WIZARD_DIALOG_IMPORT);
+			else if (classBuilder.getExtendedClass().equals(PREFERENCE_DIALOG) && classBuilder.isExtendible())
+				classBuilder.addImport(PREFERENCE_DIALOG_IMPORT);
 		}
 		return classBuilder;
 	}

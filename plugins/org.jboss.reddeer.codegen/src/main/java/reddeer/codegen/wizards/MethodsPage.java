@@ -30,17 +30,18 @@ import reddeer.codegen.builder.ClassBuilder;
 public class MethodsPage extends NewTypeWizardPage {
 
 	private ISelection selection;
-	private List<String> selectedOptional;
+	private List<String> selectedOption;
 	private ClassBuilder classBuilder;
 
-	private MethodStubsSelectionButtonGroup fMethodOptionalStubsButtons;
+	private Composite composite;
+	private MethodStubsSelectionButtonGroup fMethodOptionStubsButtons;
 
 	public static final String GETTER = "Getter";
 	public static final String SETTER = "Setter";
 	public static final String ACTION = "Action method";
-	public static final String INHERITING = "Allow inheriting";
 	public static final String CONSTANTS = "Generate static constants";
-	public static final String INCLUDE_ALL = "Include all widgets (all wizard pages)";
+	public static final String INCLUDE_ALL = "Include all wizard pages";
+	public static final String INHERITING = "Allow inheriting (only, if are included all wizard pages)";
 
 	/**
 	 * Constructor for MethodsPage.
@@ -51,18 +52,19 @@ public class MethodsPage extends NewTypeWizardPage {
 
 		super(true, "codeGenWizardPageTwo");
 		setTitle("Methods setup");
-		setDescription("Specify CodeGen options (aditional methods, class properties, etc.)");
+		setDescription("Specify CodeGen options (aditional methods, class properties, etc.).");
 		setImageDescriptor(ImageDescriptor.createFromURL(
 				FileLocator.find(Platform.getBundle(Activator.PLUGIN_ID), new Path("icons/reddeer_logo.png"), null)));
 		this.selection = selection;
 		this.classBuilder = builder;
-		selectedOptional = new ArrayList<String>();
-		selectedOptional.add(GETTER);
-		selectedOptional.add(SETTER);
-		selectedOptional.add(INHERITING);
-		selectedOptional.add(ACTION);
+		selectedOption = new ArrayList<String>();
+		// Default selected options
+		selectedOption.add(GETTER);
+		selectedOption.add(SETTER);
+		selectedOption.add(ACTION);
+		selectedOption.add(CONSTANTS);
+		// selectedOptional.add(INHERITING);
 		// selectedOptional.add(INCLUDE_ALL);
-		selectedOptional.add(CONSTANTS);
 		setPageComplete(false);
 	}
 
@@ -70,15 +72,15 @@ public class MethodsPage extends NewTypeWizardPage {
 	public void createControl(Composite parent) {
 
 		initializeDialogUnits(parent);
-		Composite composite = new Composite(parent, SWT.NONE);
+		composite = new Composite(parent, SWT.NONE);
 		int nColumns = 4;
 
 		GridLayout layout = new GridLayout();
 		layout.numColumns = nColumns;
 		composite.setLayout(layout);
 
-		String[] optionalButtonNames = new String[] { GETTER, SETTER, INHERITING, ACTION, INCLUDE_ALL, CONSTANTS };
-		fMethodOptionalStubsButtons = new MethodStubsSelectionButtonGroup(SWT.CHECK, optionalButtonNames, 1) {
+		String[] optionalButtonNames = new String[] { GETTER, SETTER, ACTION, CONSTANTS, INCLUDE_ALL, INHERITING };
+		fMethodOptionStubsButtons = new MethodStubsSelectionButtonGroup(SWT.CHECK, optionalButtonNames, 1) {
 			@Override
 			protected void doWidgetSelected(SelectionEvent e) {
 				super.doWidgetSelected(e);
@@ -88,12 +90,13 @@ public class MethodsPage extends NewTypeWizardPage {
 		};
 
 		createMethodStubSelectionControls(composite, nColumns);
-		fMethodOptionalStubsButtons.setSelection(0, true);
-		fMethodOptionalStubsButtons.setSelection(1, true);
-		fMethodOptionalStubsButtons.setSelection(2, true);
-		fMethodOptionalStubsButtons.setSelection(3, true);
+		fMethodOptionStubsButtons.setSelection(0, true);
+		fMethodOptionStubsButtons.setSelection(1, true);
+		fMethodOptionStubsButtons.setSelection(2, true);
+		fMethodOptionStubsButtons.setSelection(3, true);
 		// fMethodOptionalStubsButtons.setSelection(4, true);
-		fMethodOptionalStubsButtons.setSelection(5, true);
+		// fMethodOptionalStubsButtons.setSelection(5, true);
+		fMethodOptionStubsButtons.setEnabled(5, false);
 		setControl(composite);
 		Dialog.applyDialogFont(composite);
 	}
@@ -103,17 +106,29 @@ public class MethodsPage extends NewTypeWizardPage {
 	}
 
 	private void handleSelectedOptional(SelectionEvent e) {
-		boolean bool = ((Button) e.widget).getSelection();
 		String name = ((Button) e.widget).getText();
-		if (bool && !selectedOptional.contains(name))
-			selectedOptional.add(name);
-		else if (!bool && selectedOptional.contains(name))
-			selectedOptional.remove(name);
+
+		if (fMethodOptionStubsButtons.isSelected(4))
+			fMethodOptionStubsButtons.setEnabled(5, true);
+		else
+			fMethodOptionStubsButtons.setEnabled(5, false);
+
+		if (!selectedOption.contains(name)) {
+			selectedOption.add(name);
+			if (name.equals(INCLUDE_ALL) && fMethodOptionStubsButtons.isSelected(5)) {
+				selectedOption.add(INHERITING);
+			}
+		} else {
+			selectedOption.remove(name);
+			if (name.equals(INCLUDE_ALL)) {
+				selectedOption.remove(INHERITING);
+			}
+		}
 	}
 
 	protected void createMethodStubSelectionControls(Composite composite, int nColumns) {
 		LayoutUtil.createEmptySpace(composite, nColumns);
-		LayoutUtil.setHorizontalSpan(fMethodOptionalStubsButtons.getSelectionButtonsGroup(composite), nColumns - 1);
+		LayoutUtil.setHorizontalSpan(fMethodOptionStubsButtons.getSelectionButtonsGroup(composite), nColumns - 1);
 	}
 
 	/**
@@ -122,7 +137,7 @@ public class MethodsPage extends NewTypeWizardPage {
 	 * @return List<String>
 	 */
 	public List<String> getSelectedOptional() {
-		return selectedOptional;
+		return selectedOption;
 	}
 
 }

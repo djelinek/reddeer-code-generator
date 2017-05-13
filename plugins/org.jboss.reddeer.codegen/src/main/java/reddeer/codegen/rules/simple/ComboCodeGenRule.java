@@ -65,7 +65,8 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		}
 		String ref = RedDeerUtils.getReferencedCompositeString(getComposites());
 		return MethodBuilder.method().returnType(type).get(label + suffix)
-				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")").type(MethodsPage.GETTER);
+				.returnCommand("new " + type + "(" + ref + WidgetUtils.cleanText(label) + ")").type(MethodsPage.GETTER)
+				.rule(suffix);
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 			label = "\"" + label + "\"";
 		}
 		return MethodBuilder.method().returnType("String").get("Text " + label).returnCommand(getCommand("get"))
-				.type(MethodsPage.GETTER);
+				.type(MethodsPage.GETTER).rule(suffix);
 	}
 
 	/**
@@ -102,7 +103,7 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 			label = "\"" + label + "\"";
 		}
 		return MethodBuilder.method().returnType("String").get("Selection" + label)
-				.returnCommand(getCommand("getSelection")).type(MethodsPage.GETTER);
+				.returnCommand(getCommand("getSelection")).type(MethodsPage.GETTER).rule(suffix);
 	}
 
 	/**
@@ -120,7 +121,7 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 			label = "\"" + label + "\"";
 		}
 		return MethodBuilder.method().returnType("List<String>").get("Items" + label).returnCommand(getCommand("items"))
-				.type(MethodsPage.GETTER);
+				.type(MethodsPage.GETTER).rule(suffix);
 	}
 
 	/**
@@ -138,7 +139,7 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 			label = "\"" + label + "\"";
 		}
 		return MethodBuilder.method().name("setSelection " + label).parameter("String str")
-				.command(getCommand("setSelection")).type(MethodsPage.SETTER);
+				.command(getCommand("setSelection")).type(MethodsPage.SETTER).rule(suffix);
 	}
 
 	/**

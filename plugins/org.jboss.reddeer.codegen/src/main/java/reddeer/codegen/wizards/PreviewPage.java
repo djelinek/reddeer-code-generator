@@ -29,7 +29,7 @@ public class PreviewPage extends NewTypeWizardPage {
 	public PreviewPage(ISelection selection) {
 		super(true, "codeGenWizardPageThree");
 		setTitle("CodeGen preview");
-		setDescription("This page shows preview of generated class");
+		setDescription("This page shows preview of generated class. (editable)");
 		setImageDescriptor(ImageDescriptor.createFromURL(
 				FileLocator.find(Platform.getBundle(Activator.PLUGIN_ID), new Path("icons/reddeer_logo.png"), null)));
 		this.selection = selection;
