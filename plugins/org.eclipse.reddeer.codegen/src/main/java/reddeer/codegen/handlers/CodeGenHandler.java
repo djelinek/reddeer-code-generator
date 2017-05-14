@@ -3,12 +3,10 @@ package reddeer.codegen.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.PageChangingEvent;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -23,7 +21,6 @@ import reddeer.codegen.wizards.FirstPage;
 import reddeer.codegen.wizards.MethodsPage;
 import reddeer.codegen.wizards.PreviewPage;
 import org.eclipse.reddeer.common.logging.Logger;
-import org.eclipse.reddeer.core.handler.ShellHandler;
 import org.eclipse.reddeer.core.lookup.ShellLookup;
 
 /**

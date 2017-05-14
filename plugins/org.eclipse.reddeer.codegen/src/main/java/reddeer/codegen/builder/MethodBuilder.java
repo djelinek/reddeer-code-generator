@@ -75,6 +75,15 @@ public class MethodBuilder implements Comparable<MethodBuilder> {
 	}
 
 	/**
+	 * Get method visibility
+	 * 
+	 * @return String
+	 */
+	public String getVisibility() {
+		return visibility;
+	}
+
+	/**
 	 * Sets return type.
 	 * 
 	 * @param type
@@ -84,6 +93,15 @@ public class MethodBuilder implements Comparable<MethodBuilder> {
 	public MethodBuilder returnType(String type) {
 		this.returnType = type;
 		return this;
+	}
+
+	/**
+	 * Get method return type
+	 * 
+	 * @return String
+	 */
+	public String getReturnType() {
+		return returnType;
 	}
 
 	/**

@@ -35,5 +35,33 @@ public class MethodBuilderTest {
 		builder.get(get);
 		assertEquals("get" + get, builder.getName());
 	}
+	
+	@Test
+	public void testMethodVisibility() {
+		String visibility = "public";
+		builder.visibility(visibility);
+		assertEquals(visibility, builder.getVisibility());
+	}
+	
+	@Test
+	public void testMethodRule() {
+		String rule = "BTN";
+		builder.rule(rule);
+		assertEquals(rule, builder.getRule());
+	}
+	
+	@Test
+	public void testMethodSetterName() {
+		String name = "Name";
+		builder.set(name);
+		assertEquals("set" + name, builder.getName());
+	}
+	
+	@Test
+	public void testMethodReturnType() {
+		String returnType = "String";
+		builder.returnType(returnType);
+		assertEquals(returnType, builder.getReturnType());
+	}
 
 }

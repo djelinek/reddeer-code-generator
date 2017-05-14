@@ -172,7 +172,7 @@ public class CodeGenWizard extends NewElementWizard implements INewWizard {
 	}
 
 	private void throwCoreException(String message) throws CoreException {
-		IStatus status = new Status(IStatus.ERROR, "org.jboss.reddeer.codegen", IStatus.OK, message, null);
+		IStatus status = new Status(IStatus.ERROR, "org.eclipse.reddeer.codegen", IStatus.OK, message, null);
 		throw new CoreException(status);
 	}
 
