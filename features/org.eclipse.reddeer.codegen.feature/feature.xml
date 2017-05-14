@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.jboss.reddeer.codegen.feature"
+      id="org.eclipse.reddeer.codegen.feature"
       label="%featureName"
       version="0.0.1.qualifier">
 
@@ -17,7 +17,7 @@
    </license>
 
    <plugin
-         id="org.jboss.reddeer.codegen"
+         id="org.eclipse.reddeer.codegen"
          download-size="0"
          install-size="0"
          version="0.0.0"

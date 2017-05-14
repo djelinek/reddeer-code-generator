@@ -286,6 +286,8 @@ public class ClassBuilder {
 		classBuilder = new StringBuffer(iniComment());
 		// Add all packages into class
 		classBuilder.append("package").append(SPACE).append(packageName).append(SEMICOLON).append(D_NEW_LINE);
+		// remove methods which will be inherit and use appropriate "extends" class header
+		boolean extend = removeInheriteMethods();
 		// Add all imports into class
 		for (String projectImport : imports) {
 			classBuilder.append("import").append(SPACE).append(projectImport).append(SEMICOLON).append(NEW_LINE);
@@ -293,10 +295,8 @@ public class ClassBuilder {
 		if (!imports.isEmpty())
 			classBuilder.append(NEW_LINE);
 		// create head of class
-		if (selectedOptions.contains(MethodsPage.INHERITING) && selectedOptions.contains(MethodsPage.INCLUDE_ALL)) {
-			// remove methods which will be inherit and use appropriate
-			// "extends" class header
-			removeInheriteMethods();
+		if (extend && selectedOptions.contains(MethodsPage.INHERITING)
+				&& selectedOptions.contains(MethodsPage.INCLUDE_ALL)) {
 			classBuilder.append(visibility).append(SPACE).append("class").append(SPACE).append(getClassName(className))
 					.append(SPACE).append("extends").append(SPACE).append(extendedClass).append(SPACE).append("{");
 		} else {
@@ -341,7 +341,7 @@ public class ClassBuilder {
 	/**
 	 * Remove methods which will be inherit
 	 */
-	public void removeInheriteMethods() {
+	public boolean removeInheriteMethods() {
 		List<MethodBuilder> toRemove = new ArrayList<>();
 		for (MethodBuilder meth : this.methods) {
 			if (meth.getName().contains("Finish") || meth.getName().contains("Cancel")
@@ -361,8 +361,10 @@ public class ClassBuilder {
 			}
 			if (i == 0) {
 				removeImport(SWT.PUSH);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	/**

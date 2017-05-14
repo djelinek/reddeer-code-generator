@@ -8,7 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>example</groupId>
-	<artifactId>reddeer.codegen.example.ui.test</artifactId>
+	<artifactId>org.eclipse.reddeer.codegen.example.ui.test</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Example UI test</name>
 	<description>Example UI test plug-in</description>
@@ -99,7 +99,7 @@
 					<configuration>
 						<useUIHarness>true</useUIHarness>
 						<useUIThread>false</useUIThread>
-						<testSuite>reddeer.codegen.example.ui.test</testSuite>
+						<testSuite>org.eclipse.reddeer.codegen.example.ui.test</testSuite>
 						<testClass>org.eclipse.reddeer.codegen.example.AllRedDeerTests</testClass>
 						<!-- <testClass>**/*Test</testClass> -->
 						<!-- THE FOLLOWING LINE MUST NOT BE BROKEN BY AUTOFORMATTING -->

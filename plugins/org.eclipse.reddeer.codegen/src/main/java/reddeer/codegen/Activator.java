@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = "org.jboss.reddeer.codegen";
+	public static final String PLUGIN_ID = "org.eclipse.reddeer.codegen";
 
 	private static Activator plugin;
 

@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>org.jboss.reddeer.site</artifactId>
+	<artifactId>org.eclipse.reddeer.codegen.site</artifactId>
 	<name>RedDeer CodeGen Update Site</name>
 	<packaging>eclipse-repository</packaging>
 
@@ -13,119 +13,124 @@
 	</parent>
 
 	<properties>
-		<update.site.name>Red Deer CodeGen</update.site.name>
+		<update.site.name>RedDeer CodeGen Site</update.site.name>
 	</properties>
+	
+	<profiles>
+		<profile>
+			<id>offline-install</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.tycho.extras</groupId>
+						<artifactId>tycho-p2-extras-plugin</artifactId>
+						<version>${tycho-version}</version>
+						<executions>
+							<execution>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>mirror</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<source>
+								<!-- source repositories to mirror from -->
+								<repository>
+									<url>${swtbot-update-site}</url>
+									<layout>p2</layout>
+								</repository>
+								<repository>
+									<url>${reddeer-update-site}</url>
+									<layout>p2</layout>
+								</repository>
+							</source>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho.extras</groupId>
-				<artifactId>tycho-p2-extras-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<executions>
-					<execution>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>mirror</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<source>
-						<!-- source repositories to mirror from -->
-						<repository>
-							<url>${swtbot-update-site}</url>
-							<layout>p2</layout>
-						</repository>
-						<repository>
-							<url>${reddeer-update-site}</url>
-							<layout>p2</layout>
-						</repository>
-					</source>
+							<!-- starting from here all configuration parameters are optional -->
+							<!-- they are only shown here with default values for documentation 
+								purpose -->
 
-					<!-- starting from here all configuration parameters are optional -->
-					<!-- they are only shown here with default values for documentation
-						purpose -->
+							<!-- List of IUs to mirror. If omitted, allIUs will be mirrored. -->
+							<!-- Omitted IU version element means latest version of the IU -->
+							<ius>
+								<!-- RedDeer bundles -->
+								<iu>
+									<id>org.eclipse.reddeer.eclipse.feature.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.eclipse.feature.source.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.gef.spy.feature.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.graphiti.feature.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.graphiti.feature.source.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.junit.extension.feature.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.junit.extension.feature.source.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.logparser.feature.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.logparser.feature.source.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.recorder.feature.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.recorder.feature.source.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.spy.feature.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.swt.feature.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.swt.feature.source.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.ui.feature.feature.group</id>
+								</iu>
+								<iu>
+									<id>org.eclipse.reddeer.ui.feature.source.feature.group</id>
+								</iu>
+								<!-- SWTBot bundles -->
+								<iu>
+									<id>org.eclipse.swtbot.generator.feature.feature.group</id>
+								</iu>
+							</ius>
+							<!-- The destination directory to mirror to. -->
+							<destination>${project.build.directory}/repository</destination>
+							<!-- Whether only strict dependencies should be followed. -->
+							<!-- "strict" means perfect version match -->
+							<followStrictOnly>false</followStrictOnly>
+							<!-- Whether or not to follow optional requirements. -->
+							<includeOptional>true</includeOptional>
+							<!-- Whether or not to follow non-greedy requirements. -->
+							<includeNonGreedy>true</includeNonGreedy>
+							<!-- don't mirror artifacts, only metadata -->
+							<mirrorMetadataOnly>false</mirrorMetadataOnly>
+							<!-- whether to compress the content.xml/artifacts.xml -->
+							<compress>true</compress>
+							<!-- whether to append to the target repository content -->
+							<append>true</append>
+							<!-- whether to mirror pack200 artifacts also. Available since tycho-extras 
+								0.17.0 -->
+							<includePacked>true</includePacked>
+						</configuration>
+					</plugin>
 
-					<!-- List of IUs to mirror. If omitted, allIUs will be mirrored. -->
-					<!-- Omitted IU version element means latest version of the IU -->
-					<ius>
-						<!-- RedDeer bundles -->
-						<iu>
-							<id>org.eclipse.reddeer.eclipse.feature.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.eclipse.feature.source.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.gef.spy.feature.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.graphiti.feature.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.graphiti.feature.source.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.junit.extension.feature.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.junit.extension.feature.source.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.logparser.feature.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.logparser.feature.source.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.recorder.feature.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.recorder.feature.source.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.spy.feature.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.swt.feature.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.swt.feature.source.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.ui.feature.feature.group</id>
-						</iu>
-						<iu>
-							<id>org.eclipse.reddeer.ui.feature.source.feature.group</id>
-						</iu>
-						<!-- SWTBot bundles -->
-						<iu>
-							<id>org.eclipse.swtbot.generator.feature.feature.group</id>
-						</iu>
-					</ius>
-					<!-- The destination directory to mirror to. -->
-					<destination>${project.build.directory}/repository</destination>
-					<!-- Whether only strict dependencies should be followed. -->
-					<!-- "strict" means perfect version match -->
-					<followStrictOnly>false</followStrictOnly>
-					<!-- Whether or not to follow optional requirements. -->
-					<includeOptional>true</includeOptional>
-					<!-- Whether or not to follow non-greedy requirements. -->
-					<includeNonGreedy>true</includeNonGreedy>
-					<!-- don't mirror artifacts, only metadata -->
-					<mirrorMetadataOnly>false</mirrorMetadataOnly>
-					<!-- whether to compress the content.xml/artifacts.xml -->
-					<compress>true</compress>
-					<!-- whether to append to the target repository content -->
-					<append>true</append>
-					<!-- whether to mirror pack200 artifacts also. Available since tycho-extras
-						0.17.0 -->
-					<includePacked>true</includePacked>
-				</configuration>
-			</plugin>
-
-		</plugins>
-	</build>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

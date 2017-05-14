@@ -14,7 +14,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>org.jboss.reddeer.codegen</module>
+		<module>org.eclipse.reddeer.codegen</module>
 	</modules>
 
 </project>

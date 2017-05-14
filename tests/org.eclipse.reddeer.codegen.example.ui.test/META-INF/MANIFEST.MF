@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Reddeer CodeGen example project
-Bundle-SymbolicName: reddeer.codegen.example.ui.test
+Bundle-SymbolicName: org.eclipse.reddeer.codegen.example.ui.test
 Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: org.eclipse.reddeer.codegen.example.Activator
 Bundle-RequiredExecutionEnvironment: J2SE-1.5,

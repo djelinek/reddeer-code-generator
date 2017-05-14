@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: CodeGen
-Bundle-SymbolicName: org.jboss.reddeer.codegen;singleton:=true
+Bundle-Name: RedDeer CodeGen
+Bundle-SymbolicName: org.eclipse.reddeer.codegen;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: reddeer.codegen.Activator
 Require-Bundle: org.eclipse.ui.ide,

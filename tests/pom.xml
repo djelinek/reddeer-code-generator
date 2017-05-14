@@ -21,6 +21,6 @@
 		<test.installPath.OSX/>
 	</properties>
 	<modules>
-		<module>reddeer.codegen.example.ui.test</module>
+		<module>org.eclipse.reddeer.codegen.example.ui.test</module>
 	</modules>
 </project>

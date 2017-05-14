@@ -8,7 +8,7 @@
 		<description>RedDeer Tool: Contains RedDeer tools.</description>
 	</category-def>
 
-	<feature url="org.jboss.reddeer.codegen.feature.qualifier" id="org.jboss.reddeer.codegen.feature"
+	<feature url="org.eclipse.reddeer.codegen.feature.qualifier" id="org.eclipse.reddeer.codegen.feature"
 		version="0.0.0">
 		<category name="ToolFeatures" />
 	</feature>
