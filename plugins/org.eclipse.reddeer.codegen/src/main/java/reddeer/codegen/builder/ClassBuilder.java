@@ -331,7 +331,8 @@ public class ClassBuilder {
 		boolean extendible = false;
 		for (MethodBuilder meth : this.methods) {
 			if (meth.getName().contains("Finish") || meth.getName().contains("Cancel")
-					|| meth.getName().contains("Next") || meth.getName().contains("Back")) {
+					|| meth.getName().contains("Next") || meth.getName().contains("Back")
+					|| meth.getName().contains("OK")) {
 				extendible = true;
 			}
 		}
@@ -345,7 +346,8 @@ public class ClassBuilder {
 		List<MethodBuilder> toRemove = new ArrayList<>();
 		for (MethodBuilder meth : this.methods) {
 			if (meth.getName().contains("Finish") || meth.getName().contains("Cancel")
-					|| meth.getName().contains("Next") || meth.getName().contains("Back")) {
+					|| meth.getName().contains("Next") || meth.getName().contains("Back")
+					|| meth.getName().contains("OK")) {
 				toRemove.add(meth);
 			}
 		}
@@ -361,10 +363,9 @@ public class ClassBuilder {
 			}
 			if (i == 0) {
 				removeImport(SWT.PUSH);
-				return true;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	/**

@@ -36,7 +36,7 @@ public class CodeGenerator {
 	public static final String WIZARD_DIALOG = "WizardDialog";
 	public static final String WIZARD_DIALOG_IMPORT = "org.eclipse.reddeer.jface.wizard.WizardDialog";
 	public static final String PREFERENCE_DIALOG = "PreferenceDialog";
-	public static final String PREFERENCE_DIALOG_IMPORT = "org.eclipse.reddeer.jface.wizard.PreferenceDialog";
+	public static final String PREFERENCE_DIALOG_IMPORT = "org.eclipse.reddeer.jface.preference.PreferenceDialog";
 
 	/**
 	 * Default Code Generator constructor
