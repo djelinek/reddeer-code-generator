@@ -29,7 +29,7 @@ public class ButtonCodeGenRule extends ButtonRule implements CodeGen {
 	}
 
 	/**
-	 * Create contructor method
+	 * Create constructor method
 	 * 
 	 * @param control
 	 *            SWT widget

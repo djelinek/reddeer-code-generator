@@ -18,23 +18,6 @@
       </wizard>
    </extension>
    <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
-         <toolbar
-               id="org.eclipse.reddeer.codegen.toolbars.codeGenToolbar"
-               label="RedDeer CodeGen">
-            <command
-                  commandId="org.eclipse.reddeer.codegen.commands.codeGenCommand"
-                  icon="icons/reddeer_icon.png"
-                  id="org.eclipse.reddeer.codegen.toolbars.codeGenCommand"
-                  label="Red Deer CodeGen"
-                  tooltip="Red Deer CodeGen">
-            </command>
-         </toolbar>
-      </menuContribution>
-   </extension>
-   <extension
          point="org.eclipse.ui.commands">
       <category
             id="org.eclipse.reddeer.codegen.commands.category"
