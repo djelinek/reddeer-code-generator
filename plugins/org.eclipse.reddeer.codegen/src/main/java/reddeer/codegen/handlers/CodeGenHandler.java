@@ -61,7 +61,6 @@ public class CodeGenHandler extends AbstractHandler {
 				return;
 		}
 		INewWizard wizard = new CodeGenWizard();
-		//wizard.init(window.getWorkbench(), (IStructuredSelection) window.getSelectionService().getSelection());
 		WizardDialog dialog = new WizardDialog(window.getShell(), wizard);
 		dialog.setMinimumPageSize(150, 350);
 
