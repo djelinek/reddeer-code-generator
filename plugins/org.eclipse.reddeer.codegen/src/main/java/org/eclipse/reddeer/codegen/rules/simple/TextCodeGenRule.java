@@ -1,4 +1,4 @@
-package reddeer.codegen.rules.simple;
+package org.eclipse.reddeer.codegen.rules.simple;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +8,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtbot.generator.framework.WidgetUtils;
-import reddeer.codegen.CodeGen;
-import reddeer.codegen.builder.MethodBuilder;
-import reddeer.codegen.wizards.MethodsPage;
+import org.eclipse.reddeer.codegen.CodeGen;
+import org.eclipse.reddeer.codegen.builder.MethodBuilder;
+import org.eclipse.reddeer.codegen.wizards.MethodsPage;
 import org.eclipse.reddeer.swt.generator.framework.rules.RedDeerUtils;
 import org.eclipse.reddeer.swt.generator.framework.rules.simple.TextRule;
 

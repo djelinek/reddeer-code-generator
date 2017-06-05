@@ -5,15 +5,15 @@
       version="0.0.1.qualifier">
 
    <description>
-      Red Deer Code Generator (RedDeer CodeGen)
+      RedDeer Code Generator (RedDeer CodeGen)
    </description>
 
    <copyright>
-      [Enter Copyright Description here.]
+      %copyright
    </copyright>
 
    <license>
-      [Enter License Description here.]
+      %license
    </license>
 
    <plugin

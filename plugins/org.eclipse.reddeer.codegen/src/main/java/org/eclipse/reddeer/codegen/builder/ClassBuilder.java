@@ -1,4 +1,4 @@
-package reddeer.codegen.builder;
+package org.eclipse.reddeer.codegen.builder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,9 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.reddeer.codegen.wizards.MethodsPage;
 import org.eclipse.swt.SWT;
-
-import reddeer.codegen.wizards.MethodsPage;
 
 /**
  * Class for completing and building a structure of JAVA class.

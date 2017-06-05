@@ -1,4 +1,4 @@
-package reddeer.codegen;
+package org.eclipse.reddeer.codegen;
 
 import java.util.List;
 
@@ -9,15 +9,15 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtbot.generator.framework.GenerationSimpleRule;
 import org.eclipse.ui.internal.dialogs.WorkbenchPreferenceDialog;
 import org.hamcrest.core.IsInstanceOf;
-import reddeer.codegen.builder.ClassBuilder;
-import reddeer.codegen.builder.MethodBuilder;
-import reddeer.codegen.finder.ControlFinder;
-import reddeer.codegen.rules.CodeGenRules;
-import reddeer.codegen.rules.simple.ButtonCodeGenRule;
-import reddeer.codegen.rules.simple.ComboCodeGenRule;
-import reddeer.codegen.rules.simple.ShellCodeGenRule;
-import reddeer.codegen.rules.simple.TextCodeGenRule;
-import reddeer.codegen.wizards.MethodsPage;
+import org.eclipse.reddeer.codegen.builder.ClassBuilder;
+import org.eclipse.reddeer.codegen.builder.MethodBuilder;
+import org.eclipse.reddeer.codegen.finder.ControlFinder;
+import org.eclipse.reddeer.codegen.rules.CodeGenRules;
+import org.eclipse.reddeer.codegen.rules.simple.ButtonCodeGenRule;
+import org.eclipse.reddeer.codegen.rules.simple.ComboCodeGenRule;
+import org.eclipse.reddeer.codegen.rules.simple.ShellCodeGenRule;
+import org.eclipse.reddeer.codegen.rules.simple.TextCodeGenRule;
+import org.eclipse.reddeer.codegen.wizards.MethodsPage;
 import org.eclipse.reddeer.core.lookup.ShellLookup;
 
 /**

@@ -1,4 +1,4 @@
-package reddeer.codegen;
+package org.eclipse.reddeer.codegen;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;

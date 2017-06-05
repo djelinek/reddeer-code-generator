@@ -2,7 +2,7 @@ package reddeer.codegen.junit.builder;
 
 import static org.junit.Assert.assertEquals;
 
-import reddeer.codegen.builder.MethodBuilder;
+import org.eclipse.reddeer.codegen.builder.MethodBuilder;
 import org.junit.Before;
 import org.junit.Test;
 

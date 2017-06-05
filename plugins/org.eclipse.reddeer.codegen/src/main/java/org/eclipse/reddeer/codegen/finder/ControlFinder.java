@@ -1,4 +1,4 @@
-package reddeer.codegen.finder;
+package org.eclipse.reddeer.codegen.finder;
 
 import java.util.ArrayList;
 import java.util.List;

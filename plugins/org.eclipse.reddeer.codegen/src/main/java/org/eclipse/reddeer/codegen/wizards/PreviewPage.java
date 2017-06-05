@@ -1,4 +1,4 @@
-package reddeer.codegen.wizards;
+package org.eclipse.reddeer.codegen.wizards;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
@@ -7,13 +7,13 @@ import org.eclipse.jdt.ui.wizards.NewTypeWizardPage;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.reddeer.codegen.Activator;
+import org.eclipse.reddeer.codegen.builder.ClassBuilder;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import reddeer.codegen.Activator;
-import reddeer.codegen.builder.ClassBuilder;
 
 /**
  * This class represents last RedDeer CodeGen wizard page – source code preview

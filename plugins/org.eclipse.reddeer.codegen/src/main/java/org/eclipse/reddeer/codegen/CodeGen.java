@@ -1,9 +1,9 @@
-package reddeer.codegen;
+package org.eclipse.reddeer.codegen;
 
 import java.util.List;
 
+import org.eclipse.reddeer.codegen.builder.MethodBuilder;
 import org.eclipse.swt.widgets.Control;
-import reddeer.codegen.builder.MethodBuilder;
 
 /**
  * Interface for all code generators. If the code generator supports a given

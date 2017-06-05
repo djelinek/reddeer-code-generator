@@ -5,13 +5,13 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <category
-            id="org.eclipse.reddeer.codegen"
+            id="reddeer.codegen"
             name="RedDeer CodeGen"
             parentCategory="org.eclipse.reddeer.tools">
       </category>
       <wizard
-            category="org.eclipse.reddeer.codegen"
-            class="reddeer.codegen.wizards.CodeGenWizard"
+            category="reddeer.codegen"
+            class="org.eclipse.reddeer.codegen.wizards.CodeGenWizard"
             icon="icons/reddeer_icon.png"
             id="reddeer.codegen.wizards.CodeGenWizard"
             name="CodeGen">
@@ -20,26 +20,26 @@
    <extension
          point="org.eclipse.ui.commands">
       <category
-            id="org.eclipse.reddeer.codegen.commands.category"
+            id="reddeer.codegen.commands.category"
             name="CodeGen Category">
       </category>
       <command
-            categoryId="org.eclipse.reddeer.codegen.commands.category"
-            id="org.eclipse.reddeer.codegen.commands.codeGenCommand"
+            categoryId="reddeer.codegen.commands.category"
+            id="reddeer.codegen.commands.codeGenCommand"
             name="CodeGen Command">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="reddeer.codegen.handlers.CodeGenHandler"
-            commandId="org.eclipse.reddeer.codegen.commands.codeGenCommand">
+            class="org.eclipse.reddeer.codegen.handlers.CodeGenHandler"
+            commandId="reddeer.codegen.commands.codeGenCommand">
       </handler>
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
       <key
-            commandId="org.eclipse.reddeer.codegen.commands.codeGenCommand"
+            commandId="reddeer.codegen.commands.codeGenCommand"
             contextId="org.eclipse.ui.contexts.dialogAndWindow"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M3+G">

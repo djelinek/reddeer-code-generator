@@ -1,4 +1,4 @@
-package reddeer.codegen.handlers;
+package org.eclipse.reddeer.codegen.handlers;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -15,11 +15,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
-import reddeer.codegen.CodeGenerator;
-import reddeer.codegen.wizards.CodeGenWizard;
-import reddeer.codegen.wizards.FirstPage;
-import reddeer.codegen.wizards.MethodsPage;
-import reddeer.codegen.wizards.PreviewPage;
+import org.eclipse.reddeer.codegen.CodeGenerator;
+import org.eclipse.reddeer.codegen.wizards.CodeGenWizard;
+import org.eclipse.reddeer.codegen.wizards.FirstPage;
+import org.eclipse.reddeer.codegen.wizards.MethodsPage;
+import org.eclipse.reddeer.codegen.wizards.PreviewPage;
 import org.eclipse.reddeer.common.logging.Logger;
 import org.eclipse.reddeer.core.lookup.ShellLookup;
 
@@ -57,7 +57,7 @@ public class CodeGenHandler extends AbstractHandler {
 		log.info("Trying to open CodeGen wizard.");
 		Shell[] shell = ShellLookup.getInstance().getShells();
 		for (Shell sh : shell) {
-			if (sh.getText() == "Red Deer CodeGen")
+			if (sh.getText() == CodeGenWizard.WIZZARD_NAME)
 				return;
 		}
 		INewWizard wizard = new CodeGenWizard();

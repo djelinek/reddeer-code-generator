@@ -1,4 +1,4 @@
-package reddeer.codegen.builder;
+package org.eclipse.reddeer.codegen.builder;
 
 import java.util.ArrayList;
 import java.util.Iterator;

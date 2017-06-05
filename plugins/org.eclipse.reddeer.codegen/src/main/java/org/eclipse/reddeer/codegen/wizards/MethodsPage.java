@@ -1,4 +1,4 @@
-package reddeer.codegen.wizards;
+package org.eclipse.reddeer.codegen.wizards;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +12,13 @@ import org.eclipse.jdt.ui.wizards.NewTypeWizardPage;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.reddeer.codegen.Activator;
+import org.eclipse.reddeer.codegen.builder.ClassBuilder;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Button;
-import reddeer.codegen.Activator;
-import reddeer.codegen.builder.ClassBuilder;
 
 /**
  * This class represents second RedDeer CodeGen wizard page – methods
@@ -63,8 +63,8 @@ public class MethodsPage extends NewTypeWizardPage {
 		selectedOption.add(SETTER);
 		selectedOption.add(ACTION);
 		selectedOption.add(CONSTANTS);
-		// selectedOptional.add(INHERITING);
-		// selectedOptional.add(INCLUDE_ALL);
+		selectedOption.add(INCLUDE_ALL);
+		// selectedOption.add(INHERITING);
 		setPageComplete(false);
 	}
 
@@ -94,9 +94,9 @@ public class MethodsPage extends NewTypeWizardPage {
 		fMethodOptionStubsButtons.setSelection(1, true);
 		fMethodOptionStubsButtons.setSelection(2, true);
 		fMethodOptionStubsButtons.setSelection(3, true);
-		// fMethodOptionalStubsButtons.setSelection(4, true);
-		// fMethodOptionalStubsButtons.setSelection(5, true);
-		fMethodOptionStubsButtons.setEnabled(5, false);
+		fMethodOptionStubsButtons.setSelection(4, true);
+		// fMethodOptionStubsButtons.setSelection(5, true);
+		// fMethodOptionStubsButtons.setEnabled(5, false);
 		setControl(composite);
 		Dialog.applyDialogFont(composite);
 	}

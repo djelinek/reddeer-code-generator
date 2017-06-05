@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: RedDeer CodeGen
 Bundle-SymbolicName: org.eclipse.reddeer.codegen;singleton:=true
 Bundle-Version: 0.0.1.qualifier
-Bundle-Activator: reddeer.codegen.Activator
+Bundle-Activator: org.eclipse.reddeer.codegen.Activator
 Require-Bundle: org.eclipse.ui.ide,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
@@ -24,4 +24,4 @@ Require-Bundle: org.eclipse.ui.ide,
  org.junit
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: reddeer.codegen.builder
+Export-Package: org.eclipse.reddeer.codegen.builder

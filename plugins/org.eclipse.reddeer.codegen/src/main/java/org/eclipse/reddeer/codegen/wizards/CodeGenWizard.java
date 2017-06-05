@@ -1,4 +1,4 @@
-package reddeer.codegen.wizards;
+package org.eclipse.reddeer.codegen.wizards;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -25,7 +25,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import reddeer.codegen.builder.ClassBuilder;
+import org.eclipse.reddeer.codegen.builder.ClassBuilder;
 import org.eclipse.reddeer.common.logging.Logger;
 import org.eclipse.reddeer.common.util.Display;
 
@@ -36,10 +36,11 @@ import org.eclipse.reddeer.common.util.Display;
  */
 @SuppressWarnings("restriction")
 public class CodeGenWizard extends NewElementWizard implements INewWizard {
-
+	
 	private final Logger log = Logger.getLogger(CodeGenWizard.class);
 
 	private static final String JAVA_SUFFIX = ".java";
+	public static final String WIZZARD_NAME = "RedDeer CodeGen";
 
 	private FirstPage firstPage;
 	private MethodsPage methodsPage;
@@ -53,7 +54,7 @@ public class CodeGenWizard extends NewElementWizard implements INewWizard {
 	 */
 	public CodeGenWizard() {
 		super();
-		this.setWindowTitle("Red Deer CodeGen");
+		this.setWindowTitle(WIZZARD_NAME);
 		setNeedsProgressMonitor(true);
 		classBuilder = new ClassBuilder();
 	}
@@ -137,7 +138,7 @@ public class CodeGenWizard extends NewElementWizard implements INewWizard {
 					@Override
 					public void run() {
 						ans = MessageDialog.openQuestion(getShell(), "Warning dialog",
-								"This file already exists, overwrite ?");
+								"This class already exists, overwrite ?");
 						if (ans)
 							try {
 								file.setContents(stream, true, true, monitor);
