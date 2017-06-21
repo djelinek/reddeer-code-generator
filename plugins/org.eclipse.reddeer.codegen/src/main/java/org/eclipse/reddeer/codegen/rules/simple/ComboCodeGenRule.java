@@ -154,7 +154,7 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		Map<String, String> items = new TreeMap<>();
 		if (combo.getItemCount() > 0) {
 			for (String item : combo.getItems()) {
-				String key = WidgetUtils.cleanText(item).toUpperCase().replaceAll(" ", "_");
+				String key = WidgetUtils.cleanText(item).toUpperCase().replaceAll("\\W", "_");
 				items.put(key, item);
 			}
 			return items;
