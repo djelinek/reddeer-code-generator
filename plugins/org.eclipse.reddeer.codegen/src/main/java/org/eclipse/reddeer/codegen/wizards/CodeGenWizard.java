@@ -36,7 +36,7 @@ import org.eclipse.reddeer.common.util.Display;
  */
 @SuppressWarnings("restriction")
 public class CodeGenWizard extends NewElementWizard implements INewWizard {
-	
+
 	private final Logger log = Logger.getLogger(CodeGenWizard.class);
 
 	private static final String JAVA_SUFFIX = ".java";
@@ -81,8 +81,8 @@ public class CodeGenWizard extends NewElementWizard implements INewWizard {
 	}
 
 	/**
-	 * This method is called when 'Finish' button is pressed in the wizard. We
-	 * will create an operation and run it using wizard as execution context.
+	 * This method is called when 'Finish' button is pressed in the wizard. We will
+	 * create an operation and run it using wizard as execution context.
 	 */
 	@Override
 	public boolean performFinish() {
@@ -116,9 +116,8 @@ public class CodeGenWizard extends NewElementWizard implements INewWizard {
 	}
 
 	/**
-	 * The worker method. It will find the container, create the file if missing
-	 * or just replace its contents, and open the editor on the newly created
-	 * file.
+	 * The worker method. It will find the container, create the file if missing or
+	 * just replace its contents, and open the editor on the newly created file.
 	 */
 	private void doFinish(String containerName, String fileName, InputStream stream, IProgressMonitor monitor)
 			throws CoreException {
@@ -126,6 +125,9 @@ public class CodeGenWizard extends NewElementWizard implements INewWizard {
 		monitor.beginTask("Creating " + fileName, 2);
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IResource resource = root.findMember(new Path(containerName));
+		if (resource == null)
+			resource = firstPage.getPackageFragmentRoot()
+					.createPackageFragment(firstPage.getPackageText(), true, monitor).getResource();
 		if (!resource.exists() || !(resource instanceof IContainer)) {
 			throwCoreException("Container \"" + containerName + "\" does not exist.");
 		}
