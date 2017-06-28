@@ -26,12 +26,15 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 	private String suffix = "CMB";
 	private List<String> forReturn;
 
+	private Event event;
+
 	public ComboCodeGenRule() {
 		forReturn = new ArrayList<>();
 	}
 
 	@Override
-	public boolean appliesTo(Event event) {
+	public boolean appliesTo(Event ev) {
+		this.event = ev;
 		event.type = SWT.Modify;
 		if (event.widget instanceof Combo)
 			try {
@@ -154,7 +157,7 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		Map<String, String> items = new TreeMap<>();
 		if (combo.getItemCount() > 0) {
 			for (String item : combo.getItems()) {
-				String key = WidgetUtils.cleanText(item).toUpperCase().replaceAll("\\W", "_");
+				String key = constantMask(WidgetUtils.cleanText(item).toUpperCase().replaceAll("\\W", " "));
 				items.put(key, item);
 			}
 			return items;
@@ -217,6 +220,35 @@ public class ComboCodeGenRule extends ComboRule implements CodeGen {
 		else if (type.equals("items"))
 			sb.append(").getItems()");
 		return sb.toString();
+	}
+
+	/**
+	 * Return right name string mask for generated static combo constants
+	 * 
+	 * @param str
+	 *            String
+	 * 
+	 * @return String
+	 */
+	private String constantMask(String str) {
+		List<String> list = new ArrayList<>();
+		String group = "";
+		try {			
+			group = WidgetUtils.getGroup(((Combo) event.widget)).replaceAll("\\W", " ");
+		} catch (Exception e) {
+			group = getLabel().replaceAll("\\W", " ");
+		}
+		String[] s1 = group.split(" ");
+		for (int i = 0; i < s1.length; i++) {
+			if (!s1[i].isEmpty())
+				list.add(s1[i].trim().toUpperCase());
+		}
+		String[] s2 = str.split(" ");
+		for (int i = 0; i < s2.length; i++) {
+			if (!s2[i].isEmpty())
+				list.add(s2[i].trim().toUpperCase());
+		}
+		return String.join("_", list);
 	}
 
 }

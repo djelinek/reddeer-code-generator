@@ -31,9 +31,12 @@ import org.eclipse.reddeer.core.lookup.ShellLookup;
 public class CodeGenHandler extends AbstractHandler {
 
 	private final Logger log = Logger.getLogger(CodeGenHandler.class);
+	
+	private Shell lastActiveShell;
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+		lastActiveShell = ShellLookup.getInstance().getCurrentActiveShell();
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 		openCodeGen(window);
 		window.getShell().getDisplay().addFilter(SWT.KeyDown, new Listener() {
@@ -99,6 +102,7 @@ public class CodeGenHandler extends AbstractHandler {
 					CodeGenerator g = new CodeGenerator(meth.getClassBuilder().getClassName(),
 							meth.getClassBuilder().getPackageName(), meth.getSelectedOptional());
 					log.info("Trying to update text area in 'PreviewPage'.");
+					g.setLastActiveShell(lastActiveShell);
 					prev.updateAreaContent(g.generateCode());
 				}
 

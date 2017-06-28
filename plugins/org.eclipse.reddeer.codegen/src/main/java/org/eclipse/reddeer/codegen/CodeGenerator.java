@@ -18,7 +18,6 @@ import org.eclipse.reddeer.codegen.rules.simple.ComboCodeGenRule;
 import org.eclipse.reddeer.codegen.rules.simple.ShellCodeGenRule;
 import org.eclipse.reddeer.codegen.rules.simple.TextCodeGenRule;
 import org.eclipse.reddeer.codegen.wizards.MethodsPage;
-import org.eclipse.reddeer.core.lookup.ShellLookup;
 
 /**
  * Class for generating source code for all supported widget rules. This class
@@ -29,6 +28,7 @@ import org.eclipse.reddeer.core.lookup.ShellLookup;
 @SuppressWarnings("restriction")
 public class CodeGenerator {
 
+	private Shell lastActiveShell;
 	private ControlFinder controlFinder;
 	private ClassBuilder classBuilder;
 	private List<String> options;
@@ -55,25 +55,14 @@ public class CodeGenerator {
 	}
 
 	/**
-	 * This method is looking for first shell under Code Generator wizard
-	 * 
-	 * @return shell control
-	 */
-	public Control getShellControl() {
-		Shell[] sh = ShellLookup.getInstance().getShells();
-		return sh[sh.length - 2];
-	}
-
-	/**
 	 * This method is looking for parent Control of first wizard under Code
 	 * Generator wizard
 	 * 
 	 * @return parent wizard Control
 	 */
 	public Control getControl() {
-		Shell[] sh = ShellLookup.getInstance().getShells();
-		Control[] c = sh[sh.length - 2].getChildren();
-		Object o = sh[sh.length - 2].getData();
+		Control[] c = lastActiveShell.getChildren();	
+		Object o = lastActiveShell.getData();	
 		if (!options.contains(MethodsPage.INCLUDE_ALL) && !options.contains(MethodsPage.INHERITING)) {
 			if (o instanceof WizardDialog) {
 				return ((WizardDialog) o).getCurrentPage().getControl();
@@ -103,7 +92,7 @@ public class CodeGenerator {
 		classBuilder.addOptions(options);
 		classBuilder.clearImports();
 		List<Control> controls = controlFinder.find(getControl(), new IsInstanceOf(Control.class));
-		controls.add(getShellControl());
+		controls.add(lastActiveShell);
 		List<GenerationSimpleRule> simples = new CodeGenRules().createSimpleRules();
 		Event e = new Event();
 		for (Control control : controls) {
@@ -151,5 +140,9 @@ public class CodeGenerator {
 				classBuilder.addImport(PREFERENCE_DIALOG_IMPORT);
 		}
 		return classBuilder;
+	}
+	
+	public void setLastActiveShell(Shell sh) {
+		this.lastActiveShell = sh;
 	}
 }

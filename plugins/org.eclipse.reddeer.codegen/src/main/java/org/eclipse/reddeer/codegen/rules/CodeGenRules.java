@@ -16,7 +16,15 @@ import org.eclipse.reddeer.swt.generator.framework.rules.RedDeerSWTGeneratorRule
  * @author djelinek
  */
 public class CodeGenRules extends RedDeerSWTGeneratorRules {
+	
+	public static final String BUTTON_SUFFIX = "BTN";
+	
+	public static final String COMBO_SUFFIX = "CMB";
 
+	public static final String SHELL_SUFFIX = "SHL";
+	
+	public static final String TEXT_SUFFIX = "TXT";
+	
 	@Override
 	public List<GenerationSimpleRule> createSimpleRules() {
 		List<GenerationSimpleRule> rules = new ArrayList<GenerationSimpleRule>();
